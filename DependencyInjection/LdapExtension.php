@@ -21,7 +21,7 @@ class LdapExtension extends Extension
      */
     public function ldapLoad($config, ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('os_security.provider.ldap')) {
+        if (!$container->hasDefinition('os_security.authentication.factory.basic_pre_auth')) {
             $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
             $loader->load('ldap.xml');
         }

@@ -17,7 +17,9 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->ldapLoad($config, $container);
 
-        $this->assertTrue($container->hasDefinition('os_security.provider.ldap'));
+        $this->assertTrue($container->hasDefinition('os_security.authentication.factory.basic_pre_auth'));
+        $this->assertTrue($container->hasDefinition('os_security.authentication.listener.basic_pre_auth'));
+        $this->assertTrue($container->hasDefinition('os_security.user.provider.ldap'));
 
         foreach (array_keys($config) as $key) {
             $this->assertEquals($config[$key], $container->getParameter(sprintf('os_security.ldap.%s', $key)));

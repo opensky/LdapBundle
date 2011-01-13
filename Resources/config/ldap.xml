@@ -4,6 +4,7 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="os_security.authentication.listener.basic_pre_auth.class">Bundle\OpenSky\LdapBundle\Security\Firewall\BasicPreAuthenticationListener</parameter>
         <parameter key="os_security.user.provider.ldap.class">Bundle\OpenSky\LdapBundle\Security\User\LdapUserProvider</parameter>
         <parameter key="os_security.ldap.client.class">Zend\Ldap\Ldap</parameter>
         <parameter key="os_security.ldap.client_options" />
@@ -14,7 +15,17 @@
     </parameters>
 
     <services>
-        <service id="os_security.provider.ldap" class="%os_security.user.provider.ldap.class%">
+        <service id="os_security.authentication.factory.basic_pre_auth" class="Bundle\OpenSky\LdapBundle\DependencyInjection\Security\Factory\HttpBasicPreAuthFactory">
+            <tag name="security.listener.factory" />
+        </service>
+
+        <service id="os_security.authentication.listener.basic_pre_auth" class="%os_security.authentication.listener.basic_pre_auth.class%" public="false">
+            <argument type="service" id="security.context" />
+            <argument type="service" id="security.authentication.manager" />
+            <argument type="service" id="logger" on-invalid="null" />
+        </service>
+
+        <service id="os_security.user.provider.ldap" class="%os_security.user.provider.ldap.class%">
             <argument type="service">
                 <service class="%os_security.ldap.client.class%">
                     <argument>%os_security.ldap.client_options%</argument>
