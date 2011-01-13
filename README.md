@@ -82,7 +82,7 @@ Additionally, the LDAP UserProvider should be added as a provider for a firewall
     security.config:
         providers:
             ldap:
-                id: os_security.provider.ldap
+                id: os_security.user.provider.ldap
         firewalls:
             backend:
                 provider:   ldap
