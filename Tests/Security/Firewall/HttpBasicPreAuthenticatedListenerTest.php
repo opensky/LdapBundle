@@ -10,7 +10,7 @@ class HttpBasicPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
     private $listener;
     private $method;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->listener = new HttpBasicPreAuthenticatedListener(
             $this->getMock('Symfony\Component\Security\SecurityContext'),

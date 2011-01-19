@@ -17,7 +17,7 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
     private $roleBaseDn;
     private $roleAttribute;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->ldap               = $this->getMockLdap();
         $this->userDnTemplate     = 'uid=%s,ou=Users,dc=example,dc=com';
