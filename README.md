@@ -75,7 +75,10 @@ See also:
 
 ### Security Component
 
-Additionally, the LDAP UserProvider should be added as a provider for a firewall:
+This bundle is currently intended to be used alongside Apache's mod_auth_ldap.
+As such, it must be configured to operate with a PreAuthenticatedAuthenticationProvider.
+A pre-auth provider for HTTP basic authentication is included, and may be
+configured as follows:
 
     # app/config/security.yml
 
@@ -85,14 +88,19 @@ Additionally, the LDAP UserProvider should be added as a provider for a firewall
                 id: os_security.user.provider.ldap
         firewalls:
             backend:
-                provider:   ldap
-                pattern:    /admin/.*
-                http_basic: true
-                stateless:  true
+                provider:            ldap
+                pattern:             /admin(/.*)?
+                http_basic_pre_auth: true
+                stateless:           true
+        template: %kernel.root_dir%/../src/Bundle/OpenSky/LdapBundle/Resources/config/security_templates.xml
 
-In the above example, stateless, HTTP basic authentication is configured for the
-backend portion of an application.  While you certainly *could*, you probably
-wouldn't want to use the LDAP UserProvider on your frontend.
+Note: a future enhancement for this bundle will be a UserAuthenticationProvider
+to allow for authentication against an LDAP server, which will remove the need
+to use mod_auth_ldap for pre-authentication.
+
+See also:
+
+ * [mod_auth_ldap documentation](http://httpd.apache.org/docs/2.0/mod/mod_auth_ldap.html)
 
 ## The LdapUser Object ##
 

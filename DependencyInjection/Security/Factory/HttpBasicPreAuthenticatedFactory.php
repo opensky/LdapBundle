@@ -23,8 +23,8 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
             ->setPublic(false)
         ;
 
-        $listenerId = 'os_security.authentication.listener.basic_pre_auth.'.$id;
-        $listener = $container->setDefinition($listenerId, clone $container->getDefinition('os_security.authentication.listener.basic_pre_auth'));
+        $listenerId = 'security.authentication.listener.basic_pre_auth.'.$id;
+        $listener = $container->setDefinition($listenerId, clone $container->getDefinition('security.authentication.listener.basic_pre_auth'));
         $arguments = $listener->getArguments();
         $arguments[1] = new Reference($provider);
         $listener->setArguments($arguments);

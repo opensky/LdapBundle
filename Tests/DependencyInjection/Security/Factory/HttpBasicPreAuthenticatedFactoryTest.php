@@ -15,7 +15,7 @@ class HttpBasicPreAuthenticatedFactoryTest extends \PHPUnit_Framework_TestCase
         $userProvider = $this->getMock('Symfony\Component\Security\User\UserProviderInterface');
         $defaultEntryPoint = $this->getMock('Symfony\Component\Security\Authentication\EntryPoint\AuthenticationEntryPointInterface');
 
-        $container->setDefinition('os_security.authentication.listener.basic_pre_auth', new Definition());
+        $container->setDefinition('security.authentication.listener.basic_pre_auth', new Definition());
 
         list($provider, $listenerId, $returnedDefaultEntryPoint) = $factory->create($container, rand(), array(), $userProvider, $defaultEntryPoint);
 
