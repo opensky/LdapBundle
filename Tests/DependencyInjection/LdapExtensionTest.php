@@ -15,7 +15,7 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder();
         $extension = new LdapExtension();
 
-        $extension->ldapLoad($config, $container);
+        $extension->ldapLoad(array($config), $container);
 
         $this->assertTrue($container->hasDefinition('os_security.user.provider.ldap'));
 

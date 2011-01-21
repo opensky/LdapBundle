@@ -13,13 +13,21 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class LdapExtension extends Extension
 {
+    public function ldapLoad(array $configs, ContainerBuilder $container)
+    {
+        // TODO: Remove this after configuration merging is implemented
+        foreach ($configs as $config) {
+            $this->doLdapLoad($config, $container);
+        }
+    }
+
     /**
      * Loads the ldap configuration.
      *
      * @param array            $config    An array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
-    public function ldapLoad($config, ContainerBuilder $container)
+    public function doLdapLoad($config, ContainerBuilder $container)
     {
         if (!$container->hasDefinition('os_security.authentication.factory.basic_pre_auth')) {
             $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
