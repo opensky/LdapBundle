@@ -1,8 +1,8 @@
 <?php
 
-namespace Bundle\OpenSky\LdapBundle\Tests\DependencyInjection\Security\Factory;
+namespace OpenSky\LdapBundle\Tests\DependencyInjection\Security\Factory;
 
-use Bundle\OpenSky\LdapBundle\DependencyInjection\Security\Factory\HttpBasicPreAuthenticatedFactory;
+use OpenSky\LdapBundle\DependencyInjection\Security\Factory\HttpBasicPreAuthenticatedFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 

@@ -19,25 +19,35 @@ to pull in the LDAP client by itself.  Instructions for this process are documen
 in [this thread](https://groups.google.com/d/msg/symfony-devs/N-uIGhEWgs8/CrFmiLFYQbEJ)
 from the symfony-devs mailing list.
 
+### Submodule Creation
+
+Add LdapBundle to your `src/` directory:
+
+    $ git submodule add https://github.com/opensky/LdapBundle.git src/OpenSky/LdapBundle
+
+### Class Autoloading
+
+Add the "OpenSky" namespace in your project's `autoload.php` file:
+
+    # src/autoload.php
+
+    $loader->registerNamespaces(array(
+        'OpenSky' => __DIR__,
+    ));
+
+Additionally, ensure that the "Zend" namespace is also present.  It should already
+be configured as a core Symfony2 dependency.
+
 ### Application Kernel
 
-Add SimpleCASBundle to the `registerBundles()` method of your application kernel:
+Add LdapBundle to the `registerBundles()` method of your application kernel:
 
     public function registerBundles()
     {
         return array(
-            new Bundle\OpenSky\LdapBundle\OpenSkyLdapBundle(),
+            new OpenSky\LdapBundle\OpenSkyLdapBundle(),
         );
     }
-
-### Class Autoloading
-
-This step should already be done if your Symfony2 application is using ZF2, but
-make sure the Zend namespace appears in your project's `autoload.php` file:
-
-    $loader->registerNamespaces(array(
-        'Zend' => __DIR__.'/vendor/zend/library',
-    ));
 
 ## Configuration
 
@@ -92,7 +102,7 @@ configured as follows:
                 pattern:             /admin(/.*)?
                 http_basic_pre_auth: true
                 stateless:           true
-        template: %kernel.root_dir%/../src/Bundle/OpenSky/LdapBundle/Resources/config/security_templates.xml
+        template: %kernel.root_dir%/../src/OpenSky/LdapBundle/Resources/config/security_templates.xml
 
 Note: a future enhancement for this bundle will be a UserAuthenticationProvider
 to allow for authentication against an LDAP server, which will remove the need

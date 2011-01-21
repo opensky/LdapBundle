@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\OpenSky\LdapBundle\Security\Firewall;
+namespace OpenSky\LdapBundle\Security\Firewall;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Security\Firewall\PreAuthenticatedListener;

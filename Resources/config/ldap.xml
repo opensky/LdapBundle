@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="os_security.user.provider.ldap.class">Bundle\OpenSky\LdapBundle\Security\User\LdapUserProvider</parameter>
+        <parameter key="os_security.user.provider.ldap.class">OpenSky\LdapBundle\Security\User\LdapUserProvider</parameter>
         <parameter key="os_security.ldap.client.class">Zend\Ldap\Ldap</parameter>
         <parameter key="os_security.ldap.client_options" />
         <parameter key="os_security.ldap.userDnTemplate" />

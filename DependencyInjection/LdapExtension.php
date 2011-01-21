@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\OpenSky\LdapBundle\DependencyInjection;
+namespace OpenSky\LdapBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;

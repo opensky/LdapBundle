@@ -5,8 +5,8 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="security.authentication.factory.basic_pre_auth.class">Bundle\OpenSky\LdapBundle\DependencyInjection\Security\Factory\HttpBasicPreAuthenticatedFactory</parameter>
-        <parameter key="security.authentication.listener.basic_pre_auth.class">Bundle\OpenSky\LdapBundle\Security\Firewall\HttpBasicPreAuthenticatedListener</parameter>
+        <parameter key="security.authentication.factory.basic_pre_auth.class">OpenSky\LdapBundle\DependencyInjection\Security\Factory\HttpBasicPreAuthenticatedFactory</parameter>
+        <parameter key="security.authentication.listener.basic_pre_auth.class">OpenSky\LdapBundle\Security\Firewall\HttpBasicPreAuthenticatedListener</parameter>
     </parameters>
 
     <services>

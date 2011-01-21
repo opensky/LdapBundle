@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\OpenSky\LdapBundle\Security\User;
+namespace OpenSky\LdapBundle\Security\User;
 
 use Symfony\Component\Security\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Exception\UnsupportedAccountException;
