@@ -64,6 +64,8 @@ The LDAP UserProvider may be configured with the following:
         roleFilterTemplate: (memberuid=%s)
         roleBaseDn:         ou=Groups,dc=example,dc=com
         roleAttribute:      cn
+        rolePrefix:         ROLE_LDAP_
+        defaultRoles:       [ROLE_LDAP]
 
 These settings are explained below:
 
@@ -78,6 +80,10 @@ These settings are explained below:
  * `roleBaseDn` is the base DN when searching LDAP groups.
  * `roleAttribute` should be a single attribute name from the group entry.  This
    attribute will be used to derive a role identifier for the security component.
+ * `rolePrefix` is a prefix to apply when transforming LDAP group names into roles.
+   This is discussed in *Deriving Symfony2 Roles from LDAP Groups*.
+ * `defaultRoles` is an array of default roles to be assigned to all LDAP users,
+   before roles are assigned based on group memberships.
 
 See also:
 
@@ -124,6 +130,7 @@ LdapBundle will attempt to create Symfony2 security roles based on an attribute
 from the group entry.  By default, the group's common name ("cn") will be used.
 
 In general, a group's name will be slugified (using an underscore), uppercased
-and prefixed with "ROLE_".  For example, if your user exists within the LDAP
-group named "Admin", the provided LdapUser object will have the "ROLE_ADMIN" role.
-The full implementation can be found within the LdapUserProvider class.
+and prefixed with a configurable string ("ROLE_LDAP_" by default).  For example,
+if your user exists within the LDAP group named "Admin", the provided LdapUser
+object will have the "ROLE_LDAP_ADMIN" role. The full implementation can be
+found within the LdapUserProvider class.

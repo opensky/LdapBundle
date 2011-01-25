@@ -20,6 +20,8 @@ class LdapUserProvider implements UserProviderInterface
     private $roleFilterTemplate;
     private $roleBaseDn;
     private $roleAttribute;
+    private $rolePrefix;
+    private $defaultRoles;
 
     /**
      * Constructor.
@@ -29,14 +31,18 @@ class LdapUserProvider implements UserProviderInterface
      * @param string $roleFilterTemplate Filter template for role LDAP::search() query
      * @param string $roleBaseDn         Base DN for role LDAP::search() query
      * @param string $roleAttribute      Entry attribute from which to derive role name
+     * @param string $rolePrefix         Prefix for transforming group names to roles
+     * @param array  $defaultRoles       Default roles given to all users
      */
-    public function __construct(Ldap $ldap, $userDnTemplate, $roleFilterTemplate, $roleBaseDn, $roleAttribute)
+    public function __construct(Ldap $ldap, $userDnTemplate, $roleFilterTemplate, $roleBaseDn, $roleAttribute, $rolePrefix = 'ROLE_', array $defaultRoles = array())
     {
         $this->ldap               = $ldap;
         $this->userDnTemplate     = $userDnTemplate;
         $this->roleFilterTemplate = $roleFilterTemplate;
         $this->roleBaseDn         = $roleBaseDn;
         $this->roleAttribute      = $roleAttribute;
+        $this->rolePrefix         = $rolePrefix;
+        $this->defaultRoles       = $defaultRoles;
     }
 
     /**
@@ -92,7 +98,7 @@ class LdapUserProvider implements UserProviderInterface
             }
         }
 
-        return $roles;
+        return array_unique(array_merge($this->defaultRoles, $roles));
     }
 
     /**
@@ -119,6 +125,6 @@ class LdapUserProvider implements UserProviderInterface
         // Trim surrounding underscores and convert to uppercase
         $role = strtoupper(trim($role, '_'));
 
-        return $role === '' ? null : 'ROLE_' . $role;
+        return $role === '' ? null : $this->rolePrefix . $role;
     }
 }

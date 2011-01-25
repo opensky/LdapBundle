@@ -16,6 +16,8 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
     private $roleFilterTemplate;
     private $roleBaseDn;
     private $roleAttribute;
+    private $rolePrefix;
+    private $defaultRoles;
 
     protected function setUp()
     {
@@ -24,13 +26,17 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
         $this->roleFilterTemplate = '(memberuid=%s)';
         $this->roleBaseDn         = 'ou=Groups,dc=example,dc=com';
         $this->roleAttribute      = self::ROLE_ATTRIBUTE;
+        $this->rolePrefix         = 'ROLE_LDAP_';
+        $this->defaultRoles       = array('ROLE_LDAP');
 
         $this->provider = new LdapUserProvider(
             $this->ldap,
             $this->userDnTemplate,
             $this->roleFilterTemplate,
             $this->roleBaseDn,
-            $this->roleAttribute
+            $this->roleAttribute,
+            $this->rolePrefix,
+            $this->defaultRoles
         );
     }
 
@@ -67,15 +73,15 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 $this->createRoleEntries(),
-                array(),
+                array('ROLE_LDAP'),
             ),
             array(
                 $this->createRoleEntries('admin', 'moderator'),
-                array('ROLE_ADMIN', 'ROLE_MODERATOR'),
+                array('ROLE_LDAP', 'ROLE_LDAP_ADMIN', 'ROLE_LDAP_MODERATOR'),
             ),
             array(
                 $this->createRoleEntries('The "Special" Group'),
-                array('ROLE_THE_SPECIAL_GROUP'),
+                array('ROLE_LDAP', 'ROLE_LDAP_THE_SPECIAL_GROUP'),
             ),
         );
     }
@@ -110,7 +116,7 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($user->equals($account));
         $this->assertEquals($username, $user->getUsername());
-        $this->assertEquals(array(), $user->getRoles());
+        $this->assertEquals(array('ROLE_LDAP'), $user->getRoles());
     }
 
     /**

@@ -34,6 +34,8 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
                 'roleFilterTemplate' => '(memberuid=%s)',
                 'roleBaseDn'         => 'ou=Groups,dc=example,dc=com',
                 'roleAttribute'      => 'cn',
+                'rolePrefix'         => 'ROLE_',
+                'defaultRoles'       => array('ROLE_ADMIN', 'ROLE_LDAP'),
             )),
         );
     }

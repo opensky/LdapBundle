@@ -34,7 +34,7 @@ class LdapExtension extends Extension
             $loader->load('ldap.xml');
         }
 
-        foreach (array('client_options', 'userDnTemplate', 'roleFilterTemplate', 'roleBaseDn', 'roleAttribute') as $key) {
+        foreach (array('client_options', 'userDnTemplate', 'roleFilterTemplate', 'roleBaseDn', 'roleAttribute', 'rolePrefix', 'defaultRoles') as $key) {
             if (array_key_exists($key, $config)) {
                 $container->setParameter(sprintf('os_security.ldap.%s', $key), $config[$key]);
             }
