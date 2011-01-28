@@ -26,7 +26,7 @@ class HttpBasicPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPreAuthenticatedData($serverParams, $expectedData)
     {
-        $request = new Request(null, null, null, null, null, $serverParams);
+        $request = new Request(array(), array(), array(), array(), array(), $serverParams);
 
         $this->assertEquals($expectedData, $this->method->invoke($this->listener, $request));
     }
