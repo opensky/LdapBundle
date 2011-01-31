@@ -3,8 +3,8 @@
 namespace OpenSky\LdapBundle\Security\Firewall;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Security\Firewall\PreAuthenticatedListener;
-use Symfony\Component\Security\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Http\Firewall\AbstractPreAuthenticatedListener;
 
 /**
  * HttpBasicPreAuthenticationListener implements a a pre-authenticated listener
@@ -12,7 +12,7 @@ use Symfony\Component\Security\Exception\BadCredentialsException;
  *
  * @author Jeremy Mikola <jmikola@gmail.com>
  */
-class HttpBasicPreAuthenticatedListener extends PreAuthenticatedListener
+class HttpBasicPreAuthenticatedListener extends AbstractPreAuthenticatedListener
 {
     protected function getPreAuthenticatedData(Request $request)
     {

@@ -2,10 +2,10 @@
 
 namespace OpenSky\LdapBundle\Security\User;
 
-use Symfony\Component\Security\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Exception\UnsupportedAccountException;
-use Symfony\Component\Security\User\AccountInterface;
-use Symfony\Component\Security\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UnsupportedAccountException;
+use Symfony\Component\Security\Core\User\AccountInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Zend\Ldap\Ldap;
 
 /**
@@ -46,7 +46,7 @@ class LdapUserProvider implements UserProviderInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.UserProviderInterface::loadUserByUsername()
+     * @see Symfony\Component\Security\Core\User\UserProviderInterface::loadUserByUsername()
      */
     public function loadUserByUsername($username)
     {
@@ -62,7 +62,7 @@ class LdapUserProvider implements UserProviderInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.UserProviderInterface::loadUserByAccount()
+     * @see Symfony\Component\Security\Core\User\UserProviderInterface::loadUserByAccount()
      */
     public function loadUserByAccount(AccountInterface $account)
     {
@@ -127,4 +127,13 @@ class LdapUserProvider implements UserProviderInterface
 
         return $role === '' ? null : $this->rolePrefix . $role;
     }
+
+    /* (non-PHPdoc)
+     * @see Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
+     */
+    public function supportsClass($class)
+    {
+        return $class === 'OpenSky\LdapBundle\Security\User\LdapUser';
+    }
+
 }

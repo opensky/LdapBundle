@@ -13,8 +13,9 @@ class HttpBasicPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->listener = new HttpBasicPreAuthenticatedListener(
-            $this->getMock('Symfony\Component\Security\SecurityContext'),
-            $this->getMock('Symfony\Component\Security\Authentication\AuthenticationManagerInterface')
+            $this->getMock('Symfony\Component\Security\Core\SecurityContext', array(), array(), '', false, false),
+            $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface'),
+            'ldap.provider'
         );
 
         $this->method = new \ReflectionMethod($this->listener, 'getPreAuthenticatedData');
@@ -46,7 +47,7 @@ class HttpBasicPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Exception\BadCredentialsException
+     * @expectedException Symfony\Component\Security\Core\Exception\BadCredentialsException
      */
     public function testGetPreAuthenticatedDataBadCredentials()
     {

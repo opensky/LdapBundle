@@ -87,7 +87,7 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Exception\UsernameNotFoundException
+     * @expectedException Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function testLoadUserByUsernameNotFound()
     {
@@ -120,11 +120,11 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Exception\UnsupportedAccountException
+     * @expectedException Symfony\Component\Security\Core\Exception\UnsupportedAccountException
      */
     public function testLoadUserByAccountNotSupported()
     {
-        $this->provider->loadUserByAccount($this->getMock('Symfony\Component\Security\User\AccountInterface'));
+        $this->provider->loadUserByAccount($this->getMock('Symfony\Component\Security\Core\User\AccountInterface'));
     }
 
     private function createRoleEntries()

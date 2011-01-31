@@ -2,7 +2,7 @@
 
 namespace OpenSky\LdapBundle\DependencyInjection\Security\Factory;
 
-use Symfony\Bundle\FrameworkBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -27,6 +27,7 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
         $listener = $container->setDefinition($listenerId, clone $container->getDefinition('security.authentication.listener.basic_pre_auth'));
         $arguments = $listener->getArguments();
         $arguments[1] = new Reference($provider);
+        $arguments[2] = $listenerId;
         $listener->setArguments($arguments);
 
         return array($provider, $listenerId, $defaultEntryPoint);

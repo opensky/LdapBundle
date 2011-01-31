@@ -2,7 +2,7 @@
 
 namespace OpenSky\LdapBundle\Security\User;
 
-use Symfony\Component\Security\User\AccountInterface;
+use Symfony\Component\Security\Core\User\AccountInterface;
 
 /**
  * LdapUser is the user implementation used by the LDAP user provider.
@@ -31,7 +31,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.AccountInterface::__toString()
+     * @see Symfony\Component\Security\Core\User\AccountInterface::__toString()
      */
     public function __toString()
     {
@@ -39,7 +39,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.AccountInterface::getRoles()
+     * @see Symfony\Component\Security\Core\User\AccountInterface::getRoles()
      */
     public function getRoles()
     {
@@ -47,7 +47,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.AccountInterface::getPassword()
+     * @see Symfony\Component\Security\Core\User\AccountInterface::getPassword()
      */
     public function getPassword()
     {
@@ -55,7 +55,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.AccountInterface::getSalt()
+     * @see Symfony\Component\Security\Core\User\AccountInterface::getSalt()
      */
     public function getSalt()
     {
@@ -63,7 +63,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.AccountInterface::getUsername()
+     * @see Symfony\Component\Security\Core\User\AccountInterface::getUsername()
      */
     public function getUsername()
     {
@@ -71,7 +71,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.AccountInterface::eraseCredentials()
+     * @see Symfony\Component\Security\Core\User\AccountInterface::eraseCredentials()
      * @codeCoverageIgnore
      */
     public function eraseCredentials()
@@ -79,7 +79,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\User.AccountInterface::equals()
+     * @see Symfony\Component\Security\Core\User\AccountInterface::equals()
      */
     public function equals(AccountInterface $account)
     {
