@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSky\LdapBundle\DependencyInjection;
+namespace OpenSky\Bundle\LdapBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\FileLocator;

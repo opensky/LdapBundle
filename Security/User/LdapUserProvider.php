@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSky\LdapBundle\Security\User;
+namespace OpenSky\Bundle\LdapBundle\Security\User;
 
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedAccountException;
@@ -133,7 +133,7 @@ class LdapUserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return $class === 'OpenSky\LdapBundle\Security\User\LdapUser';
+        return $class === 'OpenSky\Bundle\LdapBundle\Security\User\LdapUser';
     }
 
 }

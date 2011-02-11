@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenSky\LdapBundle\Tests\Security\User;
+namespace OpenSky\Bundle\LdapBundle\Tests\Security\User;
 
-use OpenSky\LdapBundle\Security\User\LdapUser;
-use OpenSky\LdapBundle\Security\User\LdapUserProvider;
+use OpenSky\Bundle\LdapBundle\Security\User\LdapUser;
+use OpenSky\Bundle\LdapBundle\Security\User\LdapUserProvider;
 use Zend\Ldap\Ldap;
 
 class LdapUserProviderTest extends \PHPUnit_Framework_TestCase

@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenSky\LdapBundle\Tests\DependencyInjection;
+namespace OpenSky\Bundle\LdapBundle\Tests\DependencyInjection;
 
-use OpenSky\LdapBundle\DependencyInjection\LdapExtension;
+use OpenSky\Bundle\LdapBundle\DependencyInjection\LdapExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase

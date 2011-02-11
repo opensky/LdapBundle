@@ -45,7 +45,7 @@ Add LdapBundle to the `registerBundles()` method of your application kernel:
     public function registerBundles()
     {
         return array(
-            new OpenSky\LdapBundle\OpenSkyLdapBundle(),
+            new OpenSky\Bundle\LdapBundle\OpenSkyLdapBundle(),
         );
     }
 

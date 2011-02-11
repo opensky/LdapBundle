@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSky\LdapBundle\DependencyInjection\Security\Factory;
+namespace OpenSky\Bundle\LdapBundle\DependencyInjection\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

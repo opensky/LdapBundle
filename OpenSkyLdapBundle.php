@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSky\LdapBundle;
+namespace OpenSky\Bundle\LdapBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

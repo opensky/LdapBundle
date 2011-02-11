@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSky\LdapBundle\Security\User;
+namespace OpenSky\Bundle\LdapBundle\Security\User;
 
 use Symfony\Component\Security\Core\User\AccountInterface;
 

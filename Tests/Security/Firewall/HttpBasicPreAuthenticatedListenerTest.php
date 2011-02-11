@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenSky\LdapBundle\Tests\Security\Firewall;
+namespace OpenSky\Bundle\LdapBundle\Tests\Security\Firewall;
 
-use OpenSky\LdapBundle\Security\Firewall\HttpBasicPreAuthenticatedListener;
+use OpenSky\Bundle\LdapBundle\Security\Firewall\HttpBasicPreAuthenticatedListener;
 use Symfony\Component\HttpFoundation\Request;
 
 class HttpBasicPreAuthenticatedListenerTest extends \PHPUnit_Framework_TestCase
