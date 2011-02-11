@@ -5,6 +5,7 @@ namespace OpenSky\LdapBundle\DependencyInjection\Security\Factory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Configuration\Builder\NodeBuilder;
 
 /**
  * HttpBasicPreAuthenticatedFactory creates services for HTTP basic
@@ -49,5 +50,14 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
     public function getKey()
     {
         return 'http-basic-pre-auth';
+    }
+
+    /**
+     * @see Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory.SecurityFactoryInterface::addConfiguration()
+     * @codeCoverageIgnore
+     */
+    public function addConfiguration(NodeBuilder $builder)
+    {
+        $builder->scalarNode('provider')->end();
     }
 }
