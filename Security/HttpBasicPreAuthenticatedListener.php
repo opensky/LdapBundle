@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSky\Bundle\LdapBundle\Security\Firewall;
+namespace OpenSky\Bundle\LdapBundle\Security;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;

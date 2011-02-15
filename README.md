@@ -23,11 +23,13 @@ from the symfony-devs mailing list.
 
 Add LdapBundle to your `src/` directory:
 
-    $ git submodule add https://github.com/opensky/LdapBundle.git src/OpenSky/LdapBundle
+    $ git submodule add https://github.com/opensky/LdapBundle.git src/OpenSky/Bundle/LdapBundle
 
 ### Class Autoloading
 
-Add the "OpenSky" namespace in your project's `autoload.php` file:
+If the `src/` directory is already configured in your project's `autoload.php`
+via `registerNamespaceFallback()`, no changes should be necessary.  Otherwise,
+either define the fallback directory or explicitly add the "OpenSky" namespace:
 
     # src/autoload.php
 
@@ -35,8 +37,7 @@ Add the "OpenSky" namespace in your project's `autoload.php` file:
         'OpenSky' => __DIR__,
     ));
 
-Additionally, ensure that the "Zend" namespace is also present.  It should already
-be configured as a core Symfony2 dependency.
+Additionally, ensure that the "Zend" namespace is also configured for autoloading.
 
 ### Application Kernel
 
@@ -108,7 +109,8 @@ configured as follows:
                 pattern:             /admin(/.*)?
                 http_basic_pre_auth: true
                 stateless:           true
-        template: %kernel.root_dir%/../src/OpenSky/LdapBundle/Resources/config/security_templates.xml
+        factories:
+            - %kernel.root_dir%/../src/OpenSky/Bundle/LdapBundle/Resources/config/security_factories.xml
 
 Note: a future enhancement for this bundle will be a UserAuthenticationProvider
 to allow for authentication against an LDAP server, which will remove the need

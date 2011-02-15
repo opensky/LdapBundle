@@ -128,8 +128,9 @@ class LdapUserProvider implements UserProviderInterface
         return $role === '' ? null : $this->rolePrefix . $role;
     }
 
-    /* (non-PHPdoc)
+    /**
      * @see Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
+     * @codeCoverageIgnore
      */
     public function supportsClass($class)
     {

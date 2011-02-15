@@ -1,9 +1,13 @@
 <?php
 
-namespace OpenSky\Bundle\LdapBundle\DependencyInjection\Security\Factory;
+namespace OpenSky\Bundle\LdapBundle\Security;
+
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Configuration\Builder\NodeBuilder;
 
@@ -19,17 +23,24 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
     {
         $provider = 'security.authentication.provider.pre_authenticated.'.$id;
         $container
-            ->register($provider, '%security.authentication.provider.pre_authenticated.class%')
-            ->setArguments(array(new Reference($userProvider), new Reference('security.account_checker')))
-            ->setPublic(false)
+            ->setDefinition($provider, new DefinitionDecorator('security.authentication.provider.pre_authenticated'))
+            ->setArgument(0, new Reference($userProvider))
+            ->addArgument($id)
+            ->addTag('security.authentication_provider')
         ;
 
+        $listener = new Definition(
+            new Parameter('security.authentication.listener.basic_pre_auth.class'),
+            array(
+                new Reference('security.context'),
+                new Reference('security.authentication.manager'),
+                $id,
+                new Reference('logger', ContainerBuilder::IGNORE_ON_INVALID_REFERENCE),
+            )
+        );
+
         $listenerId = 'security.authentication.listener.basic_pre_auth.'.$id;
-        $listener = $container->setDefinition($listenerId, clone $container->getDefinition('security.authentication.listener.basic_pre_auth'));
-        $arguments = $listener->getArguments();
-        $arguments[1] = new Reference($provider);
-        $arguments[2] = $listenerId;
-        $listener->setArguments($arguments);
+        $container->setDefinition($listenerId, $listener);
 
         return array($provider, $listenerId, $defaultEntryPoint);
     }

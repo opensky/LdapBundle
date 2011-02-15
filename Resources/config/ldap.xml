@@ -13,6 +13,8 @@
         <parameter key="os_security.ldap.roleAttribute">cn</parameter>
         <parameter key="os_security.ldap.rolePrefix">ROLE_LDAP_</parameter>
         <parameter key="os_security.ldap.defaultRoles" type="collection" />
+
+        <parameter key="security.authentication.listener.basic_pre_auth.class">OpenSky\Bundle\LdapBundle\Security\HttpBasicPreAuthenticatedListener</parameter>
     </parameters>
 
     <services>
