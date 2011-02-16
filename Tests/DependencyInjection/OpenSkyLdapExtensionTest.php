@@ -2,29 +2,29 @@
 
 namespace OpenSky\Bundle\LdapBundle\Tests\DependencyInjection;
 
-use OpenSky\Bundle\LdapBundle\DependencyInjection\LdapExtension;
+use OpenSky\Bundle\LdapBundle\DependencyInjection\OpenSkyLdapExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider provideTestLdapLoad
+     * @dataProvider provideTestLoad
      */
-    public function testLdapLoad($config)
+    public function testLoad($config)
     {
         $container = new ContainerBuilder();
-        $extension = new LdapExtension();
+        $extension = new OpenSkyLdapExtension();
 
-        $extension->ldapLoad(array($config), $container);
+        $extension->load(array($config), $container);
 
-        $this->assertTrue($container->hasDefinition('os_security.user.provider.ldap'));
+        $this->assertTrue($container->hasDefinition('opensky.ldap.user_provider'));
 
         foreach (array_keys($config) as $key) {
-            $this->assertEquals($config[$key], $container->getParameter(sprintf('os_security.ldap.%s', $key)));
+            $this->assertEquals($config[$key], $container->getParameter(sprintf('opensky.ldap.%s', $key)));
         }
     }
 
-    public function provideTestLdapLoad()
+    public function provideTestLoad()
     {
         return array(
             array(array()),

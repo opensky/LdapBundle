@@ -58,7 +58,7 @@ The LDAP UserProvider may be configured with the following:
 
     # app/config/config_dev.yml
 
-    os_security.ldap:
+    open_sky_ldap:
         client_options:
             host: ldap.example.com
         userDnTemplate:     uid=%s,ou=Users,dc=example,dc=com
@@ -102,7 +102,7 @@ configured as follows:
     security.config:
         providers:
             ldap:
-                id: os_security.user.provider.ldap
+                id: opensky.ldap.user_provider
         firewalls:
             backend:
                 provider:            ldap
