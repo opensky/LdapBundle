@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\Configuration\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 
 /**
  * HttpBasicPreAuthenticatedFactory creates services for HTTP basic
