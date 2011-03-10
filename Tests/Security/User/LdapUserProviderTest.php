@@ -98,7 +98,7 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider->loadUserByUsername('jmikola');
     }
 
-    public function testLoadUserByAccount()
+    public function testLoadUser()
     {
         $username = 'jmikola';
         $account = new LdapUser($username);
@@ -112,7 +112,7 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
             ->method('searchEntries')
             ->will($this->returnValue(array()));
 
-        $user = $this->provider->loadUserByAccount($account);
+        $user = $this->provider->loadUser($account);
 
         $this->assertTrue($user->equals($account));
         $this->assertEquals($username, $user->getUsername());
@@ -120,11 +120,11 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Core\Exception\UnsupportedAccountException
+     * @expectedException Symfony\Component\Security\Core\Exception\UnsupportedUserException
      */
-    public function testLoadUserByAccountNotSupported()
+    public function testLoadUserNotSupported()
     {
-        $this->provider->loadUserByAccount($this->getMock('Symfony\Component\Security\Core\User\AccountInterface'));
+        $this->provider->loadUser($this->getMock('Symfony\Component\Security\Core\User\UserInterface'));
     }
 
     private function createRoleEntries()

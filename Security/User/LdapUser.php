@@ -2,14 +2,14 @@
 
 namespace OpenSky\Bundle\LdapBundle\Security\User;
 
-use Symfony\Component\Security\Core\User\AccountInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * LdapUser is the user implementation used by the LDAP user provider.
  *
  * @author Jeremy Mikola <jmikola@gmail.com>
  */
-class LdapUser implements AccountInterface
+class LdapUser implements UserInterface
 {
     protected $username;
     protected $roles;
@@ -31,7 +31,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\AccountInterface::__toString()
+     * @see Symfony\Component\Security\Core\User\UserInterface::__toString()
      */
     public function __toString()
     {
@@ -39,7 +39,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\AccountInterface::getRoles()
+     * @see Symfony\Component\Security\Core\User\UserInterface::getRoles()
      */
     public function getRoles()
     {
@@ -47,7 +47,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\AccountInterface::getPassword()
+     * @see Symfony\Component\Security\Core\User\UserInterface::getPassword()
      */
     public function getPassword()
     {
@@ -55,7 +55,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\AccountInterface::getSalt()
+     * @see Symfony\Component\Security\Core\User\UserInterface::getSalt()
      */
     public function getSalt()
     {
@@ -63,7 +63,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\AccountInterface::getUsername()
+     * @see Symfony\Component\Security\Core\User\UserInterface::getUsername()
      */
     public function getUsername()
     {
@@ -71,7 +71,7 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\AccountInterface::eraseCredentials()
+     * @see Symfony\Component\Security\Core\User\UserInterface::eraseCredentials()
      * @codeCoverageIgnore
      */
     public function eraseCredentials()
@@ -79,9 +79,9 @@ class LdapUser implements AccountInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\AccountInterface::equals()
+     * @see Symfony\Component\Security\Core\User\UserInterface::equals()
      */
-    public function equals(AccountInterface $account)
+    public function equals(UserInterface $account)
     {
         if (!$account instanceof LdapUser) {
             return false;

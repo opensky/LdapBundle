@@ -123,7 +123,7 @@ See also:
 ## The LdapUser Object ##
 
 Users provided by the LDAP UserProvider will be instances of LdapUser, which is
-a lightweight implementation of Symfony2's AccountInterface.  This user object
+a lightweight implementation of Symfony2's UserInterface.  This user object
 stores only a username and array of roles.
 
 ## Deriving Symfony2 Roles from LDAP Groups

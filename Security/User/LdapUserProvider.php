@@ -3,8 +3,8 @@
 namespace OpenSky\Bundle\LdapBundle\Security\User;
 
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\Exception\UnsupportedAccountException;
-use Symfony\Component\Security\Core\User\AccountInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Zend\Ldap\Ldap;
 
@@ -62,12 +62,12 @@ class LdapUserProvider implements UserProviderInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\UserProviderInterface::loadUserByAccount()
+     * @see Symfony\Component\Security\Core\User\UserProviderInterface::loadUser()
      */
-    public function loadUserByAccount(AccountInterface $account)
+    public function loadUser(UserInterface $account)
     {
         if (!$account instanceof LdapUser) {
-            throw new UnsupportedAccountException(sprintf('Instances of "%s" are not supported.', get_class($account)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($account)));
         }
 
         return $this->loadUserByUsername((string) $account);

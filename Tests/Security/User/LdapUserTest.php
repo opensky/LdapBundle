@@ -53,6 +53,6 @@ class LdapUserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($user->equals(new LdapUser('jmikola')));
         $this->assertFalse($user->equals(new LdapUser('foobar')));
-        $this->assertFalse($user->equals($this->getMock('Symfony\Component\Security\Core\User\AccountInterface')));
+        $this->assertFalse($user->equals($this->getMock('Symfony\Component\Security\Core\User\UserInterface')));
     }
 }
