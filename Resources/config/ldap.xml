@@ -20,7 +20,7 @@
     <services>
         <service id="opensky.ldap.user_provider" class="%opensky.ldap.user_provider.class%">
             <argument type="service">
-                <service class="%opensky.ldap.client.class%">
+                <service class="%opensky.ldap.client.class%" public="false">
                     <argument>%opensky.ldap.client_options%</argument>
                 </service>
             </argument>
