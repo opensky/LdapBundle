@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenSky\Bundle\LdapBundle\Tests\Security;
+namespace OpenSky\Bundle\LdapBundle\Tests\DependencyInjection\Security;
 
-use OpenSky\Bundle\LdapBundle\Security\HttpBasicPreAuthenticatedFactory;
+use OpenSky\Bundle\LdapBundle\DependencyInjection\Security\HttpBasicPreAuthenticatedFactory;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -18,7 +18,7 @@ class HttpBasicPreAuthenticatedFactoryTest extends \PHPUnit_Framework_TestCase
         $defaultEntryPoint = $this->getMock('Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface');
 
         // Load "security.authentication.listener.basic_pre_auth.class" parameter from ldap.xml
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../Resources/config'));
         $loader->load('ldap.xml');
 
         list($provider, $listenerId, $returnedDefaultEntryPoint) = $factory->create($container, rand(), array(), $userProvider, $defaultEntryPoint);

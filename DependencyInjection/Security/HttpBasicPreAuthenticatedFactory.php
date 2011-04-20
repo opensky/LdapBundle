@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSky\Bundle\LdapBundle\Security;
+namespace OpenSky\Bundle\LdapBundle\DependencyInjection\Security;
 
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
