@@ -8,6 +8,9 @@
         <parameter key="opensky.ldap.client.class">Zend\Ldap\Ldap</parameter>
         <parameter key="opensky.ldap.client_options" />
         <parameter key="opensky.ldap.userDnTemplate" />
+        <parameter key="opensky.ldap.userFilter" />
+        <parameter key="opensky.ldap.userBaseDn" />
+        <parameter key="opensky.ldap.userAttribute" />
         <parameter key="opensky.ldap.roleFilterTemplate" />
         <parameter key="opensky.ldap.roleBaseDn" />
         <parameter key="opensky.ldap.roleAttribute">cn</parameter>
@@ -25,6 +28,9 @@
                 </service>
             </argument>
             <argument>%opensky.ldap.userDnTemplate%</argument>
+            <argument>%opensky.ldap.userFilter%</argument>
+            <argument>%opensky.ldap.userBaseDn%</argument>
+            <argument>%opensky.ldap.userAttribute%</argument>
             <argument>%opensky.ldap.roleFilterTemplate%</argument>
             <argument>%opensky.ldap.roleBaseDn%</argument>
             <argument>%opensky.ldap.roleAttribute%</argument>

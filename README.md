@@ -62,6 +62,9 @@ The LDAP UserProvider may be configured with the following:
         client_options:
             host: ldap.example.com
         userDnTemplate:     uid=%s,ou=Users,dc=example,dc=com
+        userFilter:         (objectClass=employee)
+        userBaseDn:         ou=Users,dc=example,dc=com
+        userAttribute:      uid
         roleFilterTemplate: (memberuid=%s)
         roleBaseDn:         ou=Groups,dc=example,dc=com
         roleAttribute:      cn
@@ -76,6 +79,11 @@ These settings are explained below:
  * `userDnTemplate` is an `sprintf()` template string used to check the existence
    of a user entry in LDAP.  This template should contain "%s", which will be
    replaced with the username.
+ * `userFilter` is a filter to search for user records in LDAP. It is used in
+   combination with `userBaseDn` when searching for a list of all usernames.
+ * `userBaseDn` is the base DN when searching LDAP users.
+ * `userAttribute` should be a single attribute name from the user entry, which
+   corresponds to the username.
  * `roleFilterTemplate` is also an `sprintf()` template, but is used when searching
    LDAP groups containing a given user.  "%s" will also be replaced with the username.
  * `roleBaseDn` is the base DN when searching LDAP groups.

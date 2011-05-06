@@ -9,10 +9,14 @@ use Zend\Ldap\Ldap;
 class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
 {
     const ROLE_ATTRIBUTE = 'cn';
+    const USER_ATTRIBUTE = 'uid';
 
     private $provider;
     private $ldap;
     private $userDnTemplate;
+    private $userFilter;
+    private $userBaseDn;
+    private $userAttribute;
     private $roleFilterTemplate;
     private $roleBaseDn;
     private $roleAttribute;
@@ -23,6 +27,9 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->ldap               = $this->getMockLdap();
         $this->userDnTemplate     = 'uid=%s,ou=Users,dc=example,dc=com';
+        $this->userFilter         = '(objectClass=employee)';
+        $this->userBaseDn         = 'ou=Users,dc=example,dc=com';
+        $this->userAttribute      = self::USER_ATTRIBUTE;
         $this->roleFilterTemplate = '(memberuid=%s)';
         $this->roleBaseDn         = 'ou=Groups,dc=example,dc=com';
         $this->roleAttribute      = self::ROLE_ATTRIBUTE;
@@ -32,6 +39,9 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider = new LdapUserProvider(
             $this->ldap,
             $this->userDnTemplate,
+            $this->userFilter,
+            $this->userBaseDn,
+            $this->userAttribute,
             $this->roleFilterTemplate,
             $this->roleBaseDn,
             $this->roleAttribute,
@@ -43,7 +53,7 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideTestLoadByUsername
      */
-    public function testLoadByUsername($entries, $expectedRoles)
+    public function testLoadByUsername($entries, array $expectedRoles)
     {
         $username = 'jmikola';
 
@@ -127,12 +137,50 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider->loadUser($this->getMock('Symfony\Component\Security\Core\User\UserInterface'));
     }
 
+    /**
+     * @dataProvider provideTestGetUsernames
+     */
+    public function testGetUsernames(array $usernames)
+    {
+        $this->ldap->expects($this->once())
+            ->method('searchEntries')
+            ->with(
+                $this->userFilter,
+                $this->userBaseDn,
+                Ldap::SEARCH_SCOPE_SUB,
+                array($this->userAttribute)
+            )
+            ->will($this->returnValue(call_user_func_array(array($this, 'createUserEntries'), $usernames)));
+
+        $this->assertEquals($usernames, $this->provider->getUsernames());
+    }
+
+    public function provideTestGetUsernames()
+    {
+        return array(
+            array(array()),
+            array(array('alpha')),
+            array(array('alpha', 'beta', 'gamma')),
+        );
+    }
+
     private function createRoleEntries()
     {
         $entries = array();
 
         foreach (func_get_args() as $value) {
             $entries[] = array(self::ROLE_ATTRIBUTE => array($value));
+        }
+
+        return $entries;
+    }
+
+    private function createUserEntries()
+    {
+        $entries = array();
+
+        foreach (func_get_args() as $value) {
+            $entries[] = array(self::USER_ATTRIBUTE => array($value));
         }
 
         return $entries;

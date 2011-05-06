@@ -28,16 +28,25 @@ class LdapUserProvider implements UserProviderInterface
      *
      * @param Ldap   $ldap               LDAP client instance
      * @param string $userDnTemplate     DN template for user LDAP::exists() query
+     * @param string $userFilter         Filter for username list LDAP::search() query
+     * @param string $userBaseDn         Base DN for username list LDAP::search() query
+     * @param string $userAttribute      Entry attribute from which to derive username
      * @param string $roleFilterTemplate Filter template for role LDAP::search() query
      * @param string $roleBaseDn         Base DN for role LDAP::search() query
      * @param string $roleAttribute      Entry attribute from which to derive role name
      * @param string $rolePrefix         Prefix for transforming group names to roles
      * @param array  $defaultRoles       Default roles given to all users
      */
-    public function __construct(Ldap $ldap, $userDnTemplate, $roleFilterTemplate, $roleBaseDn, $roleAttribute, $rolePrefix = 'ROLE_', array $defaultRoles = array())
+    public function __construct(Ldap $ldap, $userDnTemplate, $userFilter, $userBaseDn, $userAttribute, $roleFilterTemplate, $roleBaseDn, $roleAttribute, $rolePrefix = 'ROLE_', array $defaultRoles = array())
     {
         $this->ldap               = $ldap;
+        /* TODO: userDnTemplate is likely unecessary since it can be generated
+         * from userBaseDn and userAttribute. It should eventually be removed.
+         */
         $this->userDnTemplate     = $userDnTemplate;
+        $this->userFilter         = $userFilter;
+        $this->userBaseDn         = $userBaseDn;
+        $this->userAttribute      = $userAttribute;
         $this->roleFilterTemplate = $roleFilterTemplate;
         $this->roleBaseDn         = $roleBaseDn;
         $this->roleAttribute      = $roleAttribute;
@@ -71,6 +80,26 @@ class LdapUserProvider implements UserProviderInterface
         }
 
         return $this->loadUserByUsername((string) $account);
+    }
+
+    public function getUsernames()
+    {
+        $usernames = array();
+
+        $entries = $this->ldap->searchEntries(
+            $this->userFilter,
+            $this->userBaseDn,
+            Ldap::SEARCH_SCOPE_SUB,
+            array($this->userAttribute)
+        );
+
+        foreach ($entries as $entry) {
+            if (isset($entry[$this->userAttribute][0])) {
+                $usernames[] = $entry[$this->userAttribute][0];
+            }
+        }
+
+        return $usernames;
     }
 
     /**

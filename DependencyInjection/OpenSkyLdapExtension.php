@@ -24,7 +24,7 @@ class OpenSkyLdapExtension extends Extension
 
         // TODO: Implement configuration merging and refactor this
         foreach ($configs as $config) {
-            foreach (array('client_options', 'userDnTemplate', 'roleFilterTemplate', 'roleBaseDn', 'roleAttribute', 'rolePrefix', 'defaultRoles') as $key) {
+            foreach (array('client_options', 'userDnTemplate', 'userFilter', 'userBaseDn', 'userAttribute', 'roleFilterTemplate', 'roleBaseDn', 'roleAttribute', 'rolePrefix', 'defaultRoles') as $key) {
                 if (array_key_exists($key, $config)) {
                     $container->setParameter(sprintf('opensky.ldap.%s', $key), $config[$key]);
                 }
