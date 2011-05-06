@@ -27,7 +27,7 @@ class LdapUserProvider implements UserProviderInterface
      * Constructor.
      *
      * @param Ldap   $ldap               LDAP client instance
-     * @param string $userDnTemplate     DN template for user LDAP::exits() query
+     * @param string $userDnTemplate     DN template for user LDAP::exists() query
      * @param string $roleFilterTemplate Filter template for role LDAP::search() query
      * @param string $roleBaseDn         Base DN for role LDAP::search() query
      * @param string $roleAttribute      Entry attribute from which to derive role name
