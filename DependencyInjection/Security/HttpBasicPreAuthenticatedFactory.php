@@ -69,6 +69,6 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
      */
     public function addConfiguration(NodeDefinition $builder)
     {
-        $builder->scalarNode('provider')->end();
+        $builder->children()->scalarNode('provider')->end()->end();
     }
 }
