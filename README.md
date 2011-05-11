@@ -23,7 +23,7 @@ from the symfony-devs mailing list.
 
 Add LdapBundle to your `src/` directory:
 
-    $ git submodule add https://github.com/opensky/LdapBundle.git src/OpenSky/Bundle/LdapBundle
+    $ git submodule add https://github.com/opensky/LdapBundle.git vendor/bundles/OpenSky/Bundle/LdapBundle
 
 ### Class Autoloading
 
@@ -31,10 +31,10 @@ If the `src/` directory is already configured in your project's `autoload.php`
 via `registerNamespaceFallback()`, no changes should be necessary.  Otherwise,
 either define the fallback directory or explicitly add the "OpenSky" namespace:
 
-    # src/autoload.php
+    # app/autoload.php
 
     $loader->registerNamespaces(array(
-        'OpenSky' => __DIR__,
+        'OpenSky' => __DIR__'/../vendor/bundles',
     ));
 
 Additionally, ensure that the "Zend" namespace is also configured for autoloading.
@@ -56,7 +56,7 @@ Add LdapBundle to the `registerBundles()` method of your application kernel:
 
 The LDAP UserProvider may be configured with the following:
 
-    # app/config/config_dev.yml
+    # app/config/config.yml
 
     open_sky_ldap:
         client_options:
@@ -110,7 +110,7 @@ configured as follows:
                 http_basic_pre_auth: true
                 stateless:           true
         factories:
-            - %kernel.root_dir%/../src/OpenSky/Bundle/LdapBundle/Resources/config/security_factories.xml
+            - %kernel.root_dir%/../vendor/bundles/OpenSky/Bundle/LdapBundle/Resources/config/security_factories.xml
 
 Note: a future enhancement for this bundle will be a UserAuthenticationProvider
 to allow for authentication against an LDAP server, which will remove the need
