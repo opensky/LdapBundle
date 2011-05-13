@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSky\Bundle\LdapBundle\Security;
+namespace OpenSky\Bundle\LdapBundle\DependencyInjection\Security;
 
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
  * HttpBasicPreAuthenticatedFactory creates services for HTTP basic
@@ -24,7 +24,7 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
         $provider = 'security.authentication.provider.pre_authenticated.'.$id;
         $container
             ->setDefinition($provider, new DefinitionDecorator('security.authentication.provider.pre_authenticated'))
-            ->setArgument(0, new Reference($userProvider))
+            ->replaceArgument(0, new Reference($userProvider))
             ->addArgument($id)
             ->addTag('security.authentication_provider')
         ;
@@ -67,8 +67,8 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
      * @see Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory.SecurityFactoryInterface::addConfiguration()
      * @codeCoverageIgnore
      */
-    public function addConfiguration(NodeBuilder $builder)
+    public function addConfiguration(NodeDefinition $builder)
     {
-        $builder->scalarNode('provider')->end();
+        $builder->children()->scalarNode('provider')->end()->end();
     }
 }
