@@ -82,26 +82,6 @@ class LdapUserProvider implements UserProviderInterface
         return $this->loadUserByUsername((string) $account);
     }
 
-    public function getUsernames()
-    {
-        $usernames = array();
-
-        $entries = $this->ldap->searchEntries(
-            $this->userFilter,
-            $this->userBaseDn,
-            Ldap::SEARCH_SCOPE_SUB,
-            array($this->userAttribute)
-        );
-
-        foreach ($entries as $entry) {
-            if (isset($entry[$this->userAttribute][0])) {
-                $usernames[] = $entry[$this->userAttribute][0];
-            }
-        }
-
-        return $usernames;
-    }
-
     /**
      * Gets roles for the username.
      *

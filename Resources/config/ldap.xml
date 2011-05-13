@@ -5,6 +5,7 @@
 
     <parameters>
         <parameter key="opensky.ldap.user_provider.class">OpenSky\Bundle\LdapBundle\Security\User\LdapUserProvider</parameter>
+        <parameter key="opensky.ldap.user_manager.class">OpenSky\Bundle\LdapBundle\Security\User\LdapUserManager</parameter>
         <parameter key="opensky.ldap.client.class">Zend\Ldap\Ldap</parameter>
         <parameter key="opensky.ldap.client_options" />
         <parameter key="opensky.ldap.userDnTemplate" />
@@ -15,18 +16,26 @@
         <parameter key="opensky.ldap.roleBaseDn" />
         <parameter key="opensky.ldap.roleAttribute">cn</parameter>
         <parameter key="opensky.ldap.rolePrefix">ROLE_LDAP_</parameter>
+        <parameter key="opensky.ldap.groupRolePrefix">DEVO</parameter>
         <parameter key="opensky.ldap.defaultRoles" type="collection" />
-
         <parameter key="security.authentication.listener.basic_pre_auth.class">OpenSky\Bundle\LdapBundle\Security\HttpBasicPreAuthenticatedListener</parameter>
     </parameters>
 
     <services>
+        <service id="opensky.ldap.client" class="%opensky.ldap.client.class%" public="false">
+            <argument>%opensky.ldap.client_options%</argument>
+        </service>
+        <service id="opensky.ldap.user_manager" class="%opensky.ldap.user_manager.class%">
+            <argument type="service" id="opensky.ldap.client" />
+            <argument>%opensky.ldap.userFilter%</argument>
+            <argument>%opensky.ldap.userBaseDn%</argument>
+            <argument>%opensky.ldap.userAttribute%</argument>
+            <argument>%opensky.ldap.roleFilterTemplate%</argument>
+            <argument>%opensky.ldap.roleBaseDn%</argument>
+            <argument>%opensky.ldap.roleAttribute%</argument>
+        </service>
         <service id="opensky.ldap.user_provider" class="%opensky.ldap.user_provider.class%">
-            <argument type="service">
-                <service class="%opensky.ldap.client.class%" public="false">
-                    <argument>%opensky.ldap.client_options%</argument>
-                </service>
-            </argument>
+            <argument type="service" id="opensky.ldap.client" />
             <argument>%opensky.ldap.userDnTemplate%</argument>
             <argument>%opensky.ldap.userFilter%</argument>
             <argument>%opensky.ldap.userBaseDn%</argument>
