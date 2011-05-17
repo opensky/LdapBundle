@@ -9,7 +9,7 @@ use Zend\Ldap\Ldap;
  *
  * @author Jeremy Mikola <jmikola@gmail.com>
  */
-class LdapUserManager
+class LdapUserManager implements LdapUserManagerInterface
 {
     private $ldap;
     private $userBaseDn;
