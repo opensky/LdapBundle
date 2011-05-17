@@ -61,33 +61,33 @@ The LDAP UserProvider may be configured with the following:
     opensky_ldap:
         client:
             host: ldap.example.com
-        userBaseDn:        ou=Users,dc=example,dc=com
-        userFilter:        (objectClass=employee)
-        usernameAttribute: uid
-        roleBaseDn:        ou=Groups,dc=example,dc=com
-        roleFilter:        (objectClass=role)
-        roleNameAttribute: cn
-        roleUserAttribute: memberuid
+        user_base_dn:        ou=Users,dc=example,dc=com
+        user_filter:         (objectClass=employee)
+        username_attribute:  uid
+        role_base_dn:        ou=Groups,dc=example,dc=com
+        role_filter:         (objectClass=role)
+        role_name_attribute: cn
+        role_user_attribute: memberuid
         security:
-            rolePrefix:   ROLE_LDAP_
-            defaultRoles: [ROLE_ADMIN, ROLE_LDAP]
+            role_prefix:   ROLE_LDAP_
+            default_roles: [ROLE_ADMIN, ROLE_LDAP]
 
 These settings are explained below:
 
  * `client`: array of options for the ZF2 LDAP client. Any options may be
    specified, although host is likely a minimum requirement.
- * `userBaseDn`: base DN when searching for users is LDAP.
- * `userFilter`: filter to apply when searching for users in LDAP.
- * `usernameAttribute`: user entry attribute to use as a username.
- * `roleBaseDn`: base DN when searching for roles in LDAP.
- * `roleFilter`: filter to apply when searching for roles in LDAP.
- * `roleNameAttribute`: role entry attribute to use as the role name.
- * `roleUserAttribute`: role entry attribute to use for inferring user
+ * `user_base_dn`: base DN when searching for users is LDAP.
+ * `user_filter`: filter to apply when searching for users in LDAP.
+ * `username_attribute`: user entry attribute to use as a username.
+ * `role_base_dn`: base DN when searching for roles in LDAP.
+ * `role_filter`: filter to apply when searching for roles in LDAP.
+ * `role_name_attribute`: role entry attribute to use as the role name.
+ * `role_user_attribute`: role entry attribute to use for inferring user
     relationships. Its value should be a set of user identifiers, which
     correspond to `usernameAttribute` values of user entries.
- * `security.rolePrefix`: prefix to apply when transforming role names from LDAP
+ * `security.role_prefix`: prefix to apply when transforming role names from LDAP
    entries into security roles. See: *Deriving Symfony2 Roles from LDAP Groups*
- * `security.defaultRoles`: array of default roles to be assigned to all LDAP
+ * `security.default_roles`: array of default roles to be assigned to all LDAP
    users, before roles are inferred from user/role entry relationships.
 
 See also:

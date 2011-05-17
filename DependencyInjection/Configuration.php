@@ -18,13 +18,13 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('userBaseDn')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('userFilter')->defaultValue('(objectClass=*)')->end()
-                ->scalarNode('usernameAttribute')->defaultValue('uid')->end()
-                ->scalarNode('roleBaseDn')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('roleFilter')->defaultValue('(objectClass=*)')->end()
-                ->scalarNode('roleNameAttribute')->defaultValue('cn')->end()
-                ->scalarNode('roleUserAttribute')->defaultValue('memberuid')->end()
+                ->scalarNode('user_base_dn')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('user_filter')->defaultValue('(objectClass=*)')->end()
+                ->scalarNode('username_attribute')->defaultValue('uid')->end()
+                ->scalarNode('role_base_dn')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('role_filter')->defaultValue('(objectClass=*)')->end()
+                ->scalarNode('role_name_attribute')->defaultValue('cn')->end()
+                ->scalarNode('role_user_attribute')->defaultValue('memberuid')->end()
             ->end()
         ;
 
@@ -57,8 +57,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('security')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('rolePrefix')->defaultValue('ROLE_LDAP_')->end()
-                        ->arrayNode('defaultRoles')
+                        ->scalarNode('role_prefix')->defaultValue('ROLE_LDAP_')->end()
+                        ->arrayNode('default_roles')
                             ->performNoDeepMerging()
                             ->beforeNormalization()->ifString()->then(function($v) { return array('value' => $v); })->end()
                             ->beforeNormalization()

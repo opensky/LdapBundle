@@ -10,8 +10,8 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
     public function testLoadMinimalConfiguration()
     {
         $config = array(
-            'userBaseDn' => 'ou=Users,dc=example,dc=com',
-            'roleBaseDn' => 'ou=Groups,dc=example,dc=com',
+            'user_base_dn' => 'ou=Users,dc=example,dc=com',
+            'role_base_dn' => 'ou=Groups,dc=example,dc=com',
         );
 
         $container = new ContainerBuilder();
@@ -22,7 +22,7 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('opensky.ldap.user_manager'));
         $this->assertTrue($container->hasDefinition('opensky.ldap.user_provider'));
 
-        foreach(array('userBaseDn', 'roleBaseDn') as $key) {
+        foreach(array('user_base_dn', 'role_base_dn') as $key) {
             $this->assertEquals($config[$key], $container->getParameter('opensky.ldap.user_manager.' . $key));
         }
     }
@@ -30,19 +30,19 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
     public function testLoadFullConfiguration()
     {
         $config = array(
-            'userBaseDn'        => 'ou=Users,dc=example,dc=com',
-            'userFilter'        => '(objectClass=employee)',
-            'usernameAttribute' => 'uid',
-            'roleBaseDn'        => 'ou=Groups,dc=example,dc=com',
-            'roleFilter'        => '(objectClass=role)',
-            'roleNameAttribute' => 'cn',
-            'roleUserAttribute' => 'memberuid',
+            'user_base_dn'        => 'ou=Users,dc=example,dc=com',
+            'user_filter'         => '(objectClass=employee)',
+            'username_attribute'  => 'uid',
+            'role_base_dn'        => 'ou=Groups,dc=example,dc=com',
+            'role_filter'         => '(objectClass=role)',
+            'role_name_attribute' => 'cn',
+            'role_user_attribute' => 'memberuid',
             'client' => array(
                 'host' => 'example.com',
             ),
             'security' => array(
-                'rolePrefix'   => 'ROLE_',
-                'defaultRoles' => array('ROLE_ADMIN', 'ROLE_LDAP'),
+                'role_prefix'   => 'ROLE_',
+                'default_roles' => array('ROLE_ADMIN', 'ROLE_LDAP'),
             )
         );
 
@@ -53,11 +53,11 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($config['client'], $container->getParameter('opensky.ldap.client.options'));
 
-        foreach(array('userBaseDn', 'userFilter', 'usernameAttribute', 'roleBaseDn', 'roleFilter', 'roleNameAttribute', 'roleUserAttribute') as $key) {
+        foreach(array('user_base_dn', 'user_filter', 'username_attribute', 'role_base_dn', 'role_filter', 'role_name_attribute', 'role_user_attribute') as $key) {
             $this->assertEquals($config[$key], $container->getParameter('opensky.ldap.user_manager.' . $key));
         }
 
-        foreach(array('rolePrefix', 'defaultRoles') as $key) {
+        foreach(array('role_prefix', 'default_roles') as $key) {
             $this->assertEquals($config['security'][$key], $container->getParameter('opensky.ldap.user_provider.' . $key));
         }
     }
