@@ -58,41 +58,37 @@ The LDAP UserProvider may be configured with the following:
 
     # app/config/config.yml
 
-    open_sky_ldap:
-        client_options:
+    opensky_ldap:
+        client:
             host: ldap.example.com
-        userDnTemplate:     uid=%s,ou=Users,dc=example,dc=com
-        userFilter:         (objectClass=employee)
-        userBaseDn:         ou=Users,dc=example,dc=com
-        userAttribute:      uid
-        roleFilterTemplate: (memberuid=%s)
-        roleBaseDn:         ou=Groups,dc=example,dc=com
-        roleAttribute:      cn
-        rolePrefix:         ROLE_LDAP_
-        defaultRoles:       [ROLE_LDAP]
+        userBaseDn:        ou=Users,dc=example,dc=com
+        userFilter:        (objectClass=employee)
+        usernameAttribute: uid
+        roleBaseDn:        ou=Groups,dc=example,dc=com
+        roleFilter:        (objectClass=role)
+        roleNameAttribute: cn
+        roleUserAttribute: memberuid
+        security:
+            rolePrefix:   ROLE_LDAP_
+            defaultRoles: [ROLE_ADMIN, ROLE_LDAP]
 
 These settings are explained below:
 
- * `client_options` corresponds to an array that will be passed to the ZF2 Ldap
-    constructor.  A host is likely the minimum requirement, but a base DN should
-    not be necessary, as the user/role queries each specify their own DN.
- * `userDnTemplate` is an `sprintf()` template string used to check the existence
-   of a user entry in LDAP.  This template should contain "%s", which will be
-   replaced with the username.
- * `userFilter` is a filter to search for user records in LDAP. It is used in
-   combination with `userBaseDn` when searching for a list of all usernames.
- * `userBaseDn` is the base DN when searching LDAP users.
- * `userAttribute` should be a single attribute name from the user entry, which
-   corresponds to the username.
- * `roleFilterTemplate` is also an `sprintf()` template, but is used when searching
-   LDAP groups containing a given user.  "%s" will also be replaced with the username.
- * `roleBaseDn` is the base DN when searching LDAP groups.
- * `roleAttribute` should be a single attribute name from the group entry.  This
-   attribute will be used to derive a role identifier for the security component.
- * `rolePrefix` is a prefix to apply when transforming LDAP group names into roles.
-   This is discussed in *Deriving Symfony2 Roles from LDAP Groups*.
- * `defaultRoles` is an array of default roles to be assigned to all LDAP users,
-   before roles are assigned based on group memberships.
+ * `client`: array of options for the ZF2 LDAP client. Any options may be
+   specified, although host is likely a minimum requirement.
+ * `userBaseDn`: base DN when searching for users is LDAP.
+ * `userFilter`: filter to apply when searching for users in LDAP.
+ * `usernameAttribute`: user entry attribute to use as a username.
+ * `roleBaseDn`: base DN when searching for roles in LDAP.
+ * `roleFilter`: filter to apply when searching for roles in LDAP.
+ * `roleNameAttribute`: role entry attribute to use as the role name.
+ * `roleUserAttribute`: role entry attribute to use for inferring user
+    relationships. Its value should be a set of user identifiers, which
+    correspond to `usernameAttribute` values of user entries.
+ * `security.rolePrefix`: prefix to apply when transforming role names from LDAP
+   entries into security roles. See: *Deriving Symfony2 Roles from LDAP Groups*
+ * `security.defaultRoles`: array of default roles to be assigned to all LDAP
+   users, before roles are inferred from user/role entry relationships.
 
 See also:
 

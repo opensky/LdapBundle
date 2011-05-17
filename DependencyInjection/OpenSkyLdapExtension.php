@@ -3,8 +3,9 @@
 namespace OpenSky\Bundle\LdapBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -15,20 +16,24 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class OpenSkyLdapExtension extends Extension
 {
     /**
-     * @see Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()
+     * @see Symfony\Component\DependencyInjection\Extension\ExtensionInterface::load()
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('ldap.xml');
 
-        // TODO: Implement configuration merging and refactor this
-        foreach ($configs as $config) {
-            foreach (array('client_options', 'userDnTemplate', 'userFilter', 'userBaseDn', 'userAttribute', 'roleFilterTemplate', 'roleBaseDn', 'roleAttribute', 'rolePrefix', 'defaultRoles') as $key) {
-                if (array_key_exists($key, $config)) {
-                    $container->setParameter(sprintf('opensky.ldap.%s', $key), $config[$key]);
-                }
-            }
+        $processor = new Processor();
+        $config = $processor->processConfiguration(new Configuration(), $configs);
+
+        $container->setParameter('opensky.ldap.client.options', $config['client']);
+
+        foreach(array('userBaseDn', 'userFilter', 'usernameAttribute', 'roleBaseDn', 'roleFilter', 'roleNameAttribute', 'roleUserAttribute') as $key) {
+            $container->setParameter('opensky.ldap.user_manager.'.$key, $config[$key]);
+        }
+
+        foreach(array('rolePrefix', 'defaultRoles') as $key) {
+            $container->setParameter('opensky.ldap.user_provider.'.$key, $config['security'][$key]);
         }
     }
 

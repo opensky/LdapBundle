@@ -4,47 +4,40 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="opensky.ldap.user_provider.class">OpenSky\Bundle\LdapBundle\Security\User\LdapUserProvider</parameter>
-        <parameter key="opensky.ldap.user_manager.class">OpenSky\Bundle\LdapBundle\Security\User\LdapUserManager</parameter>
         <parameter key="opensky.ldap.client.class">Zend\Ldap\Ldap</parameter>
-        <parameter key="opensky.ldap.client_options" />
-        <parameter key="opensky.ldap.userDnTemplate" />
-        <parameter key="opensky.ldap.userFilter" />
-        <parameter key="opensky.ldap.userBaseDn" />
-        <parameter key="opensky.ldap.userAttribute" />
-        <parameter key="opensky.ldap.roleFilterTemplate" />
-        <parameter key="opensky.ldap.roleBaseDn" />
-        <parameter key="opensky.ldap.roleAttribute">cn</parameter>
-        <parameter key="opensky.ldap.rolePrefix">ROLE_LDAP_</parameter>
-        <parameter key="opensky.ldap.groupRolePrefix">DEVO</parameter>
-        <parameter key="opensky.ldap.defaultRoles" type="collection" />
+        <parameter key="opensky.ldap.client.options" />
+        <parameter key="opensky.ldap.user_manager.class">OpenSky\Bundle\LdapBundle\Security\User\LdapUserManager</parameter>
+        <parameter key="opensky.ldap.user_manager.userBaseDn" />
+        <parameter key="opensky.ldap.user_manager.userFilter" />
+        <parameter key="opensky.ldap.user_manager.usernameAttribute" />
+        <parameter key="opensky.ldap.user_manager.roleBaseDn" />
+        <parameter key="opensky.ldap.user_manager.roleFilter" />
+        <parameter key="opensky.ldap.user_manager.roleNameAttribute" />
+        <parameter key="opensky.ldap.user_manager.roleUserAttribute" />
+        <parameter key="opensky.ldap.user_provider.class">OpenSky\Bundle\LdapBundle\Security\User\LdapUserProvider</parameter>
+        <parameter key="opensky.ldap.user_provider.rolePrefix" />
+        <parameter key="opensky.ldap.user_provider.defaultRoles" />
         <parameter key="security.authentication.listener.basic_pre_auth.class">OpenSky\Bundle\LdapBundle\Security\HttpBasicPreAuthenticatedListener</parameter>
     </parameters>
 
     <services>
         <service id="opensky.ldap.client" class="%opensky.ldap.client.class%" public="false">
-            <argument>%opensky.ldap.client_options%</argument>
+            <argument>%opensky.ldap.client.options%</argument>
         </service>
         <service id="opensky.ldap.user_manager" class="%opensky.ldap.user_manager.class%">
             <argument type="service" id="opensky.ldap.client" />
-            <argument>%opensky.ldap.userFilter%</argument>
-            <argument>%opensky.ldap.userBaseDn%</argument>
-            <argument>%opensky.ldap.userAttribute%</argument>
-            <argument>%opensky.ldap.roleFilterTemplate%</argument>
-            <argument>%opensky.ldap.roleBaseDn%</argument>
-            <argument>%opensky.ldap.roleAttribute%</argument>
+            <argument>%opensky.ldap.user_manager.userBaseDn%</argument>
+            <argument>%opensky.ldap.user_manager.userFilter%</argument>
+            <argument>%opensky.ldap.user_manager.usernameAttribute%</argument>
+            <argument>%opensky.ldap.user_manager.roleBaseDn%</argument>
+            <argument>%opensky.ldap.user_manager.roleFilter%</argument>
+            <argument>%opensky.ldap.user_manager.roleNameAttribute%</argument>
+            <argument>%opensky.ldap.user_manager.roleUserAttribute%</argument>
         </service>
         <service id="opensky.ldap.user_provider" class="%opensky.ldap.user_provider.class%">
-            <argument type="service" id="opensky.ldap.client" />
-            <argument>%opensky.ldap.userDnTemplate%</argument>
-            <argument>%opensky.ldap.userFilter%</argument>
-            <argument>%opensky.ldap.userBaseDn%</argument>
-            <argument>%opensky.ldap.userAttribute%</argument>
-            <argument>%opensky.ldap.roleFilterTemplate%</argument>
-            <argument>%opensky.ldap.roleBaseDn%</argument>
-            <argument>%opensky.ldap.roleAttribute%</argument>
-            <argument>%opensky.ldap.rolePrefix%</argument>
-            <argument>%opensky.ldap.defaultRoles%</argument>
+            <argument type="service" id="opensky.ldap.user_manager" />
+            <argument>%opensky.ldap.user_provider.rolePrefix%</argument>
+            <argument>%opensky.ldap.user_provider.defaultRoles%</argument>
         </service>
     </services>
 

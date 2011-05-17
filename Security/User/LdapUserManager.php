@@ -4,127 +4,165 @@ namespace OpenSky\Bundle\LdapBundle\Security\User;
 
 use Zend\Ldap\Ldap;
 
+/**
+ * LdapUserManager manages LDAP users and roles.
+ *
+ * @author Jeremy Mikola <jmikola@gmail.com>
+ */
 class LdapUserManager
 {
     private $ldap;
-    private $roleFilterTemplate;
+    private $userBaseDn;
+    private $userFilter;
+    private $usernameAttribute;
     private $roleBaseDn;
-    private $roleAttribute;
+    private $roleFilter;
+    private $roleNameAttribute;
+    private $roleUserAttribute;
 
     /**
      * Constructor.
      *
      * @param Ldap   $ldap               LDAP client instance
-     * @param string $userFilter         Filter for username list LDAP::search() query
-     * @param string $userBaseDn         Base DN for username list LDAP::search() query
-     * @param string $userAttribute      Entry attribute from which to derive username
-     * @param string $roleFilterTemplate Filter template for role LDAP::search() query
-     * @param string $roleBaseDn         Base DN for role LDAP::search() query
-     * @param string $roleAttribute      Entry attribute from which to derive role name
+     * @param string $userBaseDn         Base DN for user records
+     * @param string $userFilter         Filter for user queries
+     * @param string $usernameAttribute  User entry attribute from which to derive username
+     * @param string $roleBaseDn         Base DN for role records
+     * @param string $roleFilter         Filter for role queries
+     * @param string $roleNameAttribute  Role entry attribute from which to derive name
+     * @param string $roleUserAttribute  Role entry attribute from which to derive user memberships
      */
-    public function __construct(Ldap $ldap, $userFilter, $userBaseDn, $userAttribute, $roleFilterTemplate, $roleBaseDn, $roleAttribute)
+    public function __construct(Ldap $ldap, $userBaseDn, $userFilter, $usernameAttribute, $roleBaseDn, $roleFilter, $roleNameAttribute, $roleUserAttribute)
     {
         $this->ldap               = $ldap;
-        $this->userFilter         = $userFilter;
         $this->userBaseDn         = $userBaseDn;
-        $this->userAttribute      = $userAttribute;
-        $this->roleFilterTemplate = $roleFilterTemplate;
+        $this->userFilter         = $userFilter;
+        $this->usernameAttribute  = $usernameAttribute;
         $this->roleBaseDn         = $roleBaseDn;
-        $this->roleAttribute      = $roleAttribute;
-    }
-
-    public function getUsernames()
-    {
-        $usernames = array();
-
-        $entries = $this->ldap->searchEntries(
-            $this->userFilter,
-            $this->userBaseDn,
-            Ldap::SEARCH_SCOPE_SUB,
-            array($this->userAttribute)
-        );
-
-        foreach ($entries as $entry) {
-            if (isset($entry[$this->userAttribute][0])) {
-                $usernames[] = $entry[$this->userAttribute][0];
-            }
-        }
-
-        return $usernames;
-    }
-
-    public function getRoles()
-    {
-        $roles = array();
-
-        $entries = $this->ldap->searchEntries(
-            '(cn=*)',
-            $this->roleBaseDn,
-            Ldap::SEARCH_SCOPE_SUB,
-            array($this->roleAttribute)
-        );
-
-        foreach ($entries as $entry) {
-            if (isset($entry[$this->roleAttribute][0])) {
-                $roles[] = $entry[$this->roleAttribute][0];
-            }
-        }
-
-        return array_unique($roles);
+        $this->roleFilter         = $roleFilter;
+        $this->roleNameAttribute  = $roleNameAttribute;
+        $this->roleUserAttribute  = $roleUserAttribute;
     }
 
     /**
-     * Gets roles for the username.
+     * Check if the username exists.
+     *
+     * @param string $username
+     * @return boolean
+     */
+    public function hasUsername($username)
+    {
+        $dn = sprintf('%s=%s,%s', $this->usernameAttribute, $username, $this->userBaseDn);
+
+        return (boolean) $this->ldap->count($this->userFilter, $dn, Ldap::SEARCH_SCOPE_BASE);
+    }
+
+    /**
+     * Get a list of usernames.
+     *
+     * @return array
+     */
+    public function getUsernames()
+    {
+        return $this->resolveEntriesToAttributes($this->ldap->searchEntries(
+            $this->userFilter,
+            $this->userBaseDn,
+            Ldap::SEARCH_SCOPE_SUB,
+            array($this->usernameAttribute)
+        ), $this->usernameAttribute);
+    }
+
+    /**
+     * Get a list of roles.
+     *
+     * @return array
+     */
+    public function getRoles()
+    {
+        return $this->resolveEntriesToAttributes($this->ldap->searchEntries(
+            $this->roleFilter,
+            $this->roleBaseDn,
+            Ldap::SEARCH_SCOPE_SUB,
+            array($this->roleNameAttribute)
+        ), $this->roleNameAttribute);
+    }
+
+    /**
+     * Get a list of roles for the username.
      *
      * @param string $username
      * @return array
      */
     public function getRolesForUsername($username)
     {
-        $roles = array();
-
-        $entries = $this->ldap->searchEntries(
-            sprintf($this->roleFilterTemplate, $username),
+        return $this->resolveEntriesToAttributes($this->ldap->searchEntries(
+            sprintf('(&%s(%s=%s))', $this->roleFilter, $this->roleUserAttribute, $username),
             $this->roleBaseDn,
             Ldap::SEARCH_SCOPE_SUB,
-            array($this->roleAttribute)
-        );
-
-        foreach ($entries as $entry) {
-            if (isset($entry[$this->roleAttribute][0])) {
-                $roles[] = $entry[$this->roleAttribute][0];
-            }
-        }
-
-        return $roles;
+            array($this->roleNameAttribute)
+        ), $this->roleNameAttribute);
     }
 
+    /**
+     * Set roles for a username.
+     *
+     * @param string $username
+     * @param array $roles
+     */
     public function setRolesForUsername($username, array $roles)
     {
-        $currentRoles = $this->getRolesForUsername($username);
-        $allRoles = array_unique(array_merge($currentRoles, $roles));
+        $existingRoles = $this->getRolesForUsername($username);
 
-        $entriesByName = array();
-        foreach ($allRoles as $role) {
-            $entriesByName[$role] = $this->ldap->getEntry(sprintf('cn=%s,ou=Groups,dc=theopenskyproject,dc=com', $role));
-        }
+        $addRoles = array_diff($roles, $existingRoles);
+        $removeRoles = array_diff($existingRoles, $roles);
 
-        foreach ($currentRoles as $role) {
-            if (!in_array($role, $roles)) {
-                $key = array_search($username, $entriesByName[$role]['memberuid']);
-                unset($entriesByName[$role]['memberuid'][$key]);
+        $updateEntriesByDn = array();
+
+        foreach ($addRoles as $name) {
+            $dn = sprintf('%s=%s,%s', $this->roleNameAttribute, $name, $this->roleBaseDn);
+
+            if ($entry = $this->ldap->getEntry($dn)) {
+                if (!isset($entry[$this->roleUserAttribute]) || !in_array($username, $entry[$this->roleUserAttribute])) {
+                    $entry[$this->roleUserAttribute][] = $username;
+                    $updateEntriesByDn[$dn] = $entry;
+                }
             }
         }
 
-        foreach ($roles as $role) {
-            if (!isset($entriesByName[$role]['memberuid']) || !in_array($username, $entriesByName[$role]['memberuid'])) {
-                $entriesByName[$role]['memberuid'][] = $username;
+        foreach ($removeRoles as $name) {
+            $dn = sprintf('%s=%s,%s', $this->roleNameAttribute, $name, $this->roleBaseDn);
+
+            if ($entry = $this->ldap->getEntry($dn)) {
+                if (isset($entry[$this->roleUserAttribute]) && ($key = array_search($username, $entry[$this->roleUserAttribute]))) {
+                    unset($entry[$this->roleUserAttribute][$key]);
+                    $updateEntriesByDn[$dn] = $entry;
+                }
             }
         }
-        
-        foreach ($entriesByName as $role => $entry) {
-            $dn = sprintf('cn=%s,ou=Groups,dc=theopenskyproject,dc=com', $role);
+
+        foreach ($updateEntriesByDn as $dn => $entry) {
             $this->ldap->update($dn, $entry);
         }
+    }
+
+    /**
+     * Resolves entries resulting from a search query to an array of attribute
+     * values.
+     *
+     * @param array  $entries
+     * @param string $attributeName
+     * @return array
+     */
+    private function resolveEntriesToAttributes(array $entries, $attributeName)
+    {
+        $attributes = array();
+
+        foreach ($entries as $entry) {
+            if (isset($entry[$attributeName][0])) {
+                $attributes[] = $entry[$attributeName][0];
+            }
+        }
+
+        return $attributes;
     }
 }

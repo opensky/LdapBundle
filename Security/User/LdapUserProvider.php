@@ -6,7 +6,6 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Zend\Ldap\Ldap;
 
 /**
  * LdapUserProvider is an LDAP-based user provider.
@@ -15,41 +14,20 @@ use Zend\Ldap\Ldap;
  */
 class LdapUserProvider implements UserProviderInterface
 {
-    private $ldap;
-    private $userDnTemplate;
-    private $roleFilterTemplate;
-    private $roleBaseDn;
-    private $roleAttribute;
+    private $ldapUserManager;
     private $rolePrefix;
     private $defaultRoles;
 
     /**
      * Constructor.
      *
-     * @param Ldap   $ldap               LDAP client instance
-     * @param string $userDnTemplate     DN template for user LDAP::exists() query
-     * @param string $userFilter         Filter for username list LDAP::search() query
-     * @param string $userBaseDn         Base DN for username list LDAP::search() query
-     * @param string $userAttribute      Entry attribute from which to derive username
-     * @param string $roleFilterTemplate Filter template for role LDAP::search() query
-     * @param string $roleBaseDn         Base DN for role LDAP::search() query
-     * @param string $roleAttribute      Entry attribute from which to derive role name
-     * @param string $rolePrefix         Prefix for transforming group names to roles
-     * @param array  $defaultRoles       Default roles given to all users
+     * @param LdapUserManagerInterface $ldapUserManager LDAP user manager instance
+     * @param string                   $rolePrefix      Prefix for transforming group names to roles
+     * @param array                    $defaultRoles    Default roles given to all users
      */
-    public function __construct(Ldap $ldap, $userDnTemplate, $userFilter, $userBaseDn, $userAttribute, $roleFilterTemplate, $roleBaseDn, $roleAttribute, $rolePrefix = 'ROLE_', array $defaultRoles = array())
+    public function __construct(LdapUserManagerInterface $ldapUserManager, $rolePrefix = 'ROLE_', array $defaultRoles = array())
     {
-        $this->ldap               = $ldap;
-        /* TODO: userDnTemplate is likely unecessary since it can be generated
-         * from userBaseDn and userAttribute. It should eventually be removed.
-         */
-        $this->userDnTemplate     = $userDnTemplate;
-        $this->userFilter         = $userFilter;
-        $this->userBaseDn         = $userBaseDn;
-        $this->userAttribute      = $userAttribute;
-        $this->roleFilterTemplate = $roleFilterTemplate;
-        $this->roleBaseDn         = $roleBaseDn;
-        $this->roleAttribute      = $roleAttribute;
+        $this->ldapUserManager    = $ldapUserManager;
         $this->rolePrefix         = $rolePrefix;
         $this->defaultRoles       = $defaultRoles;
     }
@@ -59,15 +37,11 @@ class LdapUserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $this->ldap->bind();
-
-        if (!$this->ldap->exists(sprintf($this->userDnTemplate, $username))) {
+        if (!$this->ldapUserManager->hasUsername($username)) {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
-        $roles = $this->getRolesForUsername($username);
-
-        return new LdapUser($username, $roles);
+        return new LdapUser($username, $this->getRolesForUsername($username));
     }
 
     /**
@@ -79,7 +53,7 @@ class LdapUserProvider implements UserProviderInterface
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($account)));
         }
 
-        return $this->loadUserByUsername((string) $account);
+        return $this->loadUserByUsername($account->getUsername());
     }
 
     /**
@@ -92,18 +66,9 @@ class LdapUserProvider implements UserProviderInterface
     {
         $roles = array();
 
-        $entries = $this->ldap->searchEntries(
-            sprintf($this->roleFilterTemplate, $username),
-            $this->roleBaseDn,
-            Ldap::SEARCH_SCOPE_SUB,
-            array($this->roleAttribute)
-        );
-
-        foreach ($entries as $entry) {
-            if (isset($entry[$this->roleAttribute][0])) {
-                if ($role = $this->createRoleFromAttribute($entry[$this->roleAttribute][0])) {
-                    $roles[] = $role;
-                }
+        foreach ($this->ldapUserManager->getRolesForUsername($username) as $roleName) {
+            if ($role = $this->createRoleFromAttribute($roleName)) {
+                $roles[] = $role;
             }
         }
 
@@ -111,12 +76,12 @@ class LdapUserProvider implements UserProviderInterface
     }
 
     /**
-     * Creates a role name from an LDAP entry attribute.
+     * Creates a role name from an LDAP attribute.
      *
      * If a name cannot be derived from the attribute, null will be returned.
      *
      * @param string $attribute
-     * @return string|null
+     * @return string
      */
     private function createRoleFromAttribute($attribute)
     {
@@ -145,5 +110,4 @@ class LdapUserProvider implements UserProviderInterface
     {
         return $class === 'OpenSky\Bundle\LdapBundle\Security\User\LdapUser';
     }
-
 }
