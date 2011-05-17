@@ -33,11 +33,11 @@ class OpenSkyLdapExtension extends Extension
     }
 
     /**
-     * @see Symfony\Component\DependencyInjection\Extension.ExtensionInterface::getAlias()
+     * @see Symfony\Component\DependencyInjection\Extension\ExtensionInterface::getAlias()
      * @codeCoverageIgnore
      */
     public function getAlias()
     {
-        return 'open_sky_ldap';
+        return 'opensky_ldap';
     }
 }

@@ -2,12 +2,13 @@
 
 namespace OpenSky\Bundle\LdapBundle;
 
+use OpenSky\Bundle\LdapBundle\DependencyInjection\OpenSkyLdapExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * OpenSkyLdapBundle.
- *
- * @author Jeremy Mikola <jmikola@gmail.com>
- * @codeCoverageIgnore
- */
-class OpenSkyLdapBundle extends Bundle {}
+class OpenSkyLdapBundle extends Bundle
+{
+    public function __construct()
+    {
+        $this->extension = new OpenSkyLdapExtension();
+    }
+}
