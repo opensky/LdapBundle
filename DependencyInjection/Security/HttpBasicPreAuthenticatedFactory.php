@@ -46,7 +46,7 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
     }
 
     /**
-     * @see Symfony\Bundle\FrameworkBundle\DependencyInjection\Security\Factory.SecurityFactoryInterface::getPosition()
+     * @see Symfony\Bundle\FrameworkBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface::getPosition()
      * @codeCoverageIgnore
      */
     public function getPosition()
@@ -55,7 +55,7 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
     }
 
     /**
-     * @see Symfony\Bundle\FrameworkBundle\DependencyInjection\Security\Factory.SecurityFactoryInterface::getKey()
+     * @see Symfony\Bundle\FrameworkBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface::getKey()
      * @codeCoverageIgnore
      */
     public function getKey()
@@ -64,7 +64,7 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
     }
 
     /**
-     * @see Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory.SecurityFactoryInterface::addConfiguration()
+     * @see Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface::addConfiguration()
      * @codeCoverageIgnore
      */
     public function addConfiguration(NodeDefinition $builder)
