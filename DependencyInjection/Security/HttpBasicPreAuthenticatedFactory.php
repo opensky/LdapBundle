@@ -7,7 +7,6 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
@@ -30,7 +29,7 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
         ;
 
         $listener = new Definition(
-            new Parameter('security.authentication.listener.basic_pre_auth.class'),
+            '%opensky_ldap.authentication.listener.basic_pre_auth.class%',
             array(
                 new Reference('security.context'),
                 new Reference('security.authentication.manager'),
@@ -38,8 +37,9 @@ class HttpBasicPreAuthenticatedFactory implements SecurityFactoryInterface
                 new Reference('logger', ContainerBuilder::IGNORE_ON_INVALID_REFERENCE),
             )
         );
+        $listener->addTag('monolog.logger', array('channel' => 'security'));
 
-        $listenerId = 'security.authentication.listener.basic_pre_auth.'.$id;
+        $listenerId = 'opensky_ldap.authentication.listener.basic_pre_auth.'.$id;
         $container->setDefinition($listenerId, $listener);
 
         return array($provider, $listenerId, $defaultEntryPoint);

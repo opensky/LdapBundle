@@ -47,7 +47,7 @@ class LdapUserProvider implements UserProviderInterface
     /**
      * @see Symfony\Component\Security\Core\User\UserProviderInterface::loadUser()
      */
-    public function loadUser(UserInterface $account)
+    public function refreshUser(UserInterface $account)
     {
         if (!$account instanceof LdapUser) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($account)));

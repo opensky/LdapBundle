@@ -26,14 +26,14 @@ class OpenSkyLdapExtension extends Extension
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
-        $container->setParameter('opensky.ldap.client.options', $config['client']);
+        $container->setParameter('opensky_ldap.client.options', $config['client']);
 
         foreach(array('user_base_dn', 'user_filter', 'username_attribute', 'role_base_dn', 'role_filter', 'role_name_attribute', 'role_user_attribute') as $key) {
-            $container->setParameter('opensky.ldap.user_manager.'.$key, $config[$key]);
+            $container->setParameter('opensky_ldap.user_manager.'.$key, $config[$key]);
         }
 
         foreach(array('role_prefix', 'default_roles') as $key) {
-            $container->setParameter('opensky.ldap.user_provider.'.$key, $config['security'][$key]);
+            $container->setParameter('opensky_ldap.user_provider.'.$key, $config['security'][$key]);
         }
     }
 
