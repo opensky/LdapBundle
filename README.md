@@ -106,7 +106,7 @@ configured as follows:
     security.config:
         providers:
             ldap:
-                id: opensky.ldap.user_provider
+                id: opensky_ldap.user_provider
         firewalls:
             backend:
                 provider:            ldap
