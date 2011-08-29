@@ -81,7 +81,7 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider->loadUserByUsername($username);
     }
 
-    public function testLoadUser()
+    public function testRefreshUser()
     {
         $username = 'jmikola';
         $existingUser = new LdapUser($username);
@@ -96,7 +96,7 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
             ->with($username)
             ->will($this->returnValue(array()));
 
-        $user = $this->provider->loadUser($existingUser);
+        $user = $this->provider->refreshUser($existingUser);
 
         $this->assertTrue($user->equals($existingUser));
         $this->assertEquals($username, $user->getUsername());
@@ -106,8 +106,8 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Symfony\Component\Security\Core\Exception\UnsupportedUserException
      */
-    public function testLoadUserNotSupported()
+    public function testRefreshUserNotSupported()
     {
-        $this->provider->loadUser($this->getMock('Symfony\Component\Security\Core\User\UserInterface'));
+        $this->provider->refreshUser($this->getMock('Symfony\Component\Security\Core\User\UserInterface'));
     }
 }

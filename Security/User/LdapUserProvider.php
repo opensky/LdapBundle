@@ -45,7 +45,7 @@ class LdapUserProvider implements UserProviderInterface
     }
 
     /**
-     * @see Symfony\Component\Security\Core\User\UserProviderInterface::loadUser()
+     * @see Symfony\Component\Security\Core\User\UserProviderInterface::refreshUser()
      */
     public function refreshUser(UserInterface $account)
     {
