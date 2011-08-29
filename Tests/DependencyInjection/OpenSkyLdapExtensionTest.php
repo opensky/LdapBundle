@@ -19,11 +19,11 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->load(array($config), $container);
 
-        $this->assertTrue($container->hasDefinition('opensky.ldap.user_manager'));
-        $this->assertTrue($container->hasDefinition('opensky.ldap.user_provider'));
+        $this->assertTrue($container->hasDefinition('opensky_ldap.user_manager'));
+        $this->assertTrue($container->hasDefinition('opensky_ldap.user_provider'));
 
         foreach(array('user_base_dn', 'role_base_dn') as $key) {
-            $this->assertEquals($config[$key], $container->getParameter('opensky.ldap.user_manager.' . $key));
+            $this->assertEquals($config[$key], $container->getParameter('opensky_ldap.user_manager.' . $key));
         }
     }
 
@@ -51,14 +51,14 @@ class LdapExtensionExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->load(array($config), $container);
 
-        $this->assertEquals($config['client'], $container->getParameter('opensky.ldap.client.options'));
+        $this->assertEquals($config['client'], $container->getParameter('opensky_ldap.client.options'));
 
         foreach(array('user_base_dn', 'user_filter', 'username_attribute', 'role_base_dn', 'role_filter', 'role_name_attribute', 'role_user_attribute') as $key) {
-            $this->assertEquals($config[$key], $container->getParameter('opensky.ldap.user_manager.' . $key));
+            $this->assertEquals($config[$key], $container->getParameter('opensky_ldap.user_manager.' . $key));
         }
 
         foreach(array('role_prefix', 'default_roles') as $key) {
-            $this->assertEquals($config['security'][$key], $container->getParameter('opensky.ldap.user_provider.' . $key));
+            $this->assertEquals($config['security'][$key], $container->getParameter('opensky_ldap.user_provider.' . $key));
         }
     }
 }
