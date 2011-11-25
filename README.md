@@ -34,7 +34,7 @@ either define the fallback directory or explicitly add the "OpenSky" namespace:
     # app/autoload.php
 
     $loader->registerNamespaces(array(
-        'OpenSky' => __DIR__'/../vendor/bundles',
+        'OpenSky' => __DIR__.'/../vendor/bundles',
     ));
 
 Additionally, ensure that the "Zend" namespace is also configured for autoloading.
