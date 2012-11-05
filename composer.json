@@ -1,0 +1,16 @@
+{
+    "name": "opensky/ldap-bundle",
+    "description": "Integrates LDAP",
+    "keywords": [ "ldap", "security" ],
+    "homepage": "https://github.com/opensky/LdapBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/framework-bundle": ">=2.1.0,<2.3-dev"
+    },
+    "autoload": {
+        "psr-0": { "OpenSky\\Bundle\\LdapBundle": "" }
+    },
+    "target-dir": "OpenSky/Bundle/LdapBundle"
+}
