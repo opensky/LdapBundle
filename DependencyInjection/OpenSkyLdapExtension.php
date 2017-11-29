@@ -2,8 +2,8 @@
 
 namespace OpenSky\Bundle\LdapBundle\DependencyInjection;
 
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -28,11 +28,11 @@ class OpenSkyLdapExtension extends Extension
 
         $container->setParameter('opensky_ldap.client.options', $config['client']);
 
-        foreach(array('user_base_dn', 'user_filter', 'username_attribute', 'role_base_dn', 'role_filter', 'role_name_attribute', 'role_user_attribute') as $key) {
+        foreach (['user_base_dn', 'user_filter', 'username_attribute', 'role_base_dn', 'role_filter', 'role_name_attribute', 'role_user_attribute'] as $key) {
             $container->setParameter('opensky_ldap.user_manager.'.$key, $config[$key]);
         }
 
-        foreach(array('role_prefix', 'default_roles') as $key) {
+        foreach (['role_prefix', 'default_roles'] as $key) {
             $container->setParameter('opensky_ldap.user_provider.'.$key, $config['security'][$key]);
         }
     }

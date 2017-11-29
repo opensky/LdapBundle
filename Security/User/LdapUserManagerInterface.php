@@ -4,9 +4,13 @@ namespace OpenSky\Bundle\LdapBundle\Security\User;
 
 interface LdapUserManagerInterface
 {
-    function hasUsername($username);
-    function getUsernames();
-    function getRoles();
-    function getRolesForUsername($username);
-    function setRolesForUsername($username, array $roles);
+    public function hasUsername($username);
+
+    public function getUsernames();
+
+    public function getRoles();
+
+    public function getRolesForUsername($username);
+
+    public function setRolesForUsername($username, array $roles);
 }

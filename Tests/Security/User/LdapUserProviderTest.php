@@ -4,8 +4,9 @@ namespace OpenSky\Bundle\LdapBundle\Tests\Security\User;
 
 use OpenSky\Bundle\LdapBundle\Security\User\LdapUser;
 use OpenSky\Bundle\LdapBundle\Security\User\LdapUserProvider;
+use PHPUnit\Framework\TestCase;
 
-class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
+class LdapUserProviderTest extends TestCase
 {
     private $provider;
     private $ldapUserManager;
@@ -14,9 +15,9 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ldapUserManager = $this->getMock('OpenSky\Bundle\LdapBundle\Security\User\LdapUserManagerInterface');
-        $this->rolePrefix      = 'ROLE_LDAP_';
-        $this->defaultRoles    = array('ROLE_LDAP');
+        $this->ldapUserManager = $this->createMock('OpenSky\Bundle\LdapBundle\Security\User\LdapUserManagerInterface');
+        $this->rolePrefix = 'ROLE_LDAP_';
+        $this->defaultRoles = ['ROLE_LDAP'];
 
         $this->provider = new LdapUserProvider(
             $this->ldapUserManager,
@@ -50,24 +51,24 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
 
     public function provideTestLoadByUsername()
     {
-        return array(
-            array(
-                array(),
-                array('ROLE_LDAP'),
-            ),
-            array(
-                array('admin', 'moderator'),
-                array('ROLE_LDAP', 'ROLE_LDAP_ADMIN', 'ROLE_LDAP_MODERATOR'),
-            ),
-            array(
-                array('The "Special" Group'),
-                array('ROLE_LDAP', 'ROLE_LDAP_THE_SPECIAL_GROUP'),
-            ),
-        );
+        return [
+            [
+                [],
+                ['ROLE_LDAP'],
+            ],
+            [
+                ['admin', 'moderator'],
+                ['ROLE_LDAP', 'ROLE_LDAP_ADMIN', 'ROLE_LDAP_MODERATOR'],
+            ],
+            [
+                ['The "Special" Group'],
+                ['ROLE_LDAP', 'ROLE_LDAP_THE_SPECIAL_GROUP'],
+            ],
+        ];
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function testLoadUserByUsernameNotFound()
     {
@@ -94,20 +95,20 @@ class LdapUserProviderTest extends \PHPUnit_Framework_TestCase
         $this->ldapUserManager->expects($this->once())
             ->method('getRolesForUsername')
             ->with($username)
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $user = $this->provider->refreshUser($existingUser);
 
         $this->assertTrue($user->equals($existingUser));
         $this->assertEquals($username, $user->getUsername());
-        $this->assertEquals(array('ROLE_LDAP'), $user->getRoles());
+        $this->assertEquals(['ROLE_LDAP'], $user->getRoles());
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Core\Exception\UnsupportedUserException
+     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      */
     public function testRefreshUserNotSupported()
     {
-        $this->provider->refreshUser($this->getMock('Symfony\Component\Security\Core\User\UserInterface'));
+        $this->provider->refreshUser($this->createMock('Symfony\Component\Security\Core\User\UserInterface'));
     }
 }
