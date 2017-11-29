@@ -9,18 +9,12 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="./Tests/bootstrap.php"
 >
     <testsuites>
         <testsuite name="OpenSkyLdapBundle Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>
-
-    <php>
-        <!-- <server name="SYMFONY_SRC" value="/path/to/symfony/src" /> -->
-        <!-- <server name="ZEND_LIB" value="/path/to/zend/library" /> -->
-    </php>
 
     <filter>
         <whitelist>

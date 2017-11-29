@@ -2,8 +2,8 @@
 
 namespace OpenSky\Bundle\LdapBundle\Security\User;
 
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -25,11 +25,11 @@ class LdapUserProvider implements UserProviderInterface
      * @param string                   $rolePrefix      Prefix for transforming group names to roles
      * @param array                    $defaultRoles    Default roles given to all users
      */
-    public function __construct(LdapUserManagerInterface $ldapUserManager, $rolePrefix = 'ROLE_', array $defaultRoles = array())
+    public function __construct(LdapUserManagerInterface $ldapUserManager, $rolePrefix = 'ROLE_', array $defaultRoles = [])
     {
-        $this->ldapUserManager    = $ldapUserManager;
-        $this->rolePrefix         = $rolePrefix;
-        $this->defaultRoles       = $defaultRoles;
+        $this->ldapUserManager = $ldapUserManager;
+        $this->rolePrefix = $rolePrefix;
+        $this->defaultRoles = $defaultRoles;
     }
 
     /**
@@ -60,11 +60,12 @@ class LdapUserProvider implements UserProviderInterface
      * Gets roles for the username.
      *
      * @param string $username
+     *
      * @return array
      */
     private function getRolesForUsername($username)
     {
-        $roles = array();
+        $roles = [];
 
         foreach ($this->ldapUserManager->getRolesForUsername($username) as $roleName) {
             if ($role = $this->createRoleFromAttribute($roleName)) {
@@ -81,6 +82,7 @@ class LdapUserProvider implements UserProviderInterface
      * If a name cannot be derived from the attribute, null will be returned.
      *
      * @param string $attribute
+     *
      * @return string
      */
     private function createRoleFromAttribute($attribute)
@@ -99,7 +101,7 @@ class LdapUserProvider implements UserProviderInterface
         // Trim surrounding underscores and convert to uppercase
         $role = strtoupper(trim($role, '_'));
 
-        return $role === '' ? null : $this->rolePrefix . $role;
+        return '' === $role ? null : $this->rolePrefix.$role;
     }
 
     /**
@@ -108,6 +110,6 @@ class LdapUserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return $class === 'OpenSky\Bundle\LdapBundle\Security\User\LdapUser';
+        return 'OpenSky\Bundle\LdapBundle\Security\User\LdapUser' === $class;
     }
 }

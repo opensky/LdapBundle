@@ -3,9 +3,10 @@
 namespace OpenSky\Bundle\LdapBundle\Tests\Security\User;
 
 use OpenSky\Bundle\LdapBundle\Security\User\LdapUserManager;
+use PHPUnit\Framework\TestCase;
 use Zend\Ldap\Ldap;
 
-class LdapUserManagerTest extends \PHPUnit_Framework_TestCase
+class LdapUserManagerTest extends TestCase
 {
     const ROLE_NAME_ATTRIBUTE = 'cn';
     const USERNAME_ATTRIBUTE = 'uid';
@@ -24,15 +25,13 @@ class LdapUserManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ldap = $this->getMockBuilder('Zend\Ldap\Ldap')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ldap = $this->createMock(Ldap::class);
 
-        $this->userBaseDn        = 'ou=Users,dc=example,dc=com';
-        $this->userFilter        = '(objectClass=employee)';
+        $this->userBaseDn = 'ou=Users,dc=example,dc=com';
+        $this->userFilter = '(objectClass=employee)';
         $this->usernameAttribute = self::USERNAME_ATTRIBUTE;
-        $this->roleBaseDn        = 'ou=Groups,dc=example,dc=com';
-        $this->roleFilter        = '(objectClass=*)';
+        $this->roleBaseDn = 'ou=Groups,dc=example,dc=com';
+        $this->roleFilter = '(objectClass=*)';
         $this->roleNameAttribute = self::ROLE_NAME_ATTRIBUTE;
         $this->roleUserAttribute = 'memberuid';
 
@@ -66,10 +65,10 @@ class LdapUserManagerTest extends \PHPUnit_Framework_TestCase
 
     public function provideTestHasUsername()
     {
-        return array(
-            array(0, false),
-            array(1, true),
-        );
+        return [
+            [0, false],
+            [1, true],
+        ];
     }
 
     /**
@@ -79,8 +78,8 @@ class LdapUserManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->ldap->expects($this->once())
             ->method('searchEntries')
-            ->with($this->userFilter, $this->userBaseDn, Ldap::SEARCH_SCOPE_SUB, array($this->usernameAttribute))
-            ->will($this->returnValue(call_user_func_array(array($this, 'createUserEntries'), $usernames)));
+            ->with($this->userFilter, $this->userBaseDn, Ldap::SEARCH_SCOPE_SUB, [$this->usernameAttribute])
+            ->will($this->returnValue(call_user_func_array([$this, 'createUserEntries'], $usernames)));
 
         $this->assertEquals($usernames, $this->manager->getUsernames());
     }
@@ -92,8 +91,8 @@ class LdapUserManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->ldap->expects($this->once())
             ->method('searchEntries')
-            ->with($this->roleFilter, $this->roleBaseDn, Ldap::SEARCH_SCOPE_SUB, array($this->roleNameAttribute))
-            ->will($this->returnValue(call_user_func_array(array($this, 'createRoleEntries'), $roles)));
+            ->with($this->roleFilter, $this->roleBaseDn, Ldap::SEARCH_SCOPE_SUB, [$this->roleNameAttribute])
+            ->will($this->returnValue(call_user_func_array([$this, 'createRoleEntries'], $roles)));
 
         $this->assertEquals($roles, $this->manager->getRoles());
     }
@@ -108,27 +107,27 @@ class LdapUserManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->ldap->expects($this->once())
             ->method('searchEntries')
-            ->with($expectedFilter, $this->roleBaseDn, Ldap::SEARCH_SCOPE_SUB, array($this->roleNameAttribute))
-            ->will($this->returnValue(call_user_func_array(array($this, 'createRoleEntries'), $roles)));
+            ->with($expectedFilter, $this->roleBaseDn, Ldap::SEARCH_SCOPE_SUB, [$this->roleNameAttribute])
+            ->will($this->returnValue(call_user_func_array([$this, 'createRoleEntries'], $roles)));
 
         $this->assertEquals($roles, $this->manager->getRolesForUsername($username));
     }
 
     public function provideAttributes()
     {
-        return array(
-            array(array()),
-            array(array('alpha')),
-            array(array('alpha', 'beta', 'gamma')),
-        );
+        return [
+            [[]],
+            [['alpha']],
+            [['alpha', 'beta', 'gamma']],
+        ];
     }
 
     private function createRoleEntries()
     {
-        $entries = array();
+        $entries = [];
 
         foreach (func_get_args() as $value) {
-            $entries[] = array(self::ROLE_NAME_ATTRIBUTE => array($value));
+            $entries[] = [self::ROLE_NAME_ATTRIBUTE => [$value]];
         }
 
         return $entries;
@@ -136,10 +135,10 @@ class LdapUserManagerTest extends \PHPUnit_Framework_TestCase
 
     private function createUserEntries()
     {
-        $entries = array();
+        $entries = [];
 
         foreach (func_get_args() as $value) {
-            $entries[] = array(self::USERNAME_ATTRIBUTE => array($value));
+            $entries[] = [self::USERNAME_ATTRIBUTE => [$value]];
         }
 
         return $entries;

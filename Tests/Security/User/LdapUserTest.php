@@ -3,11 +3,12 @@
 namespace OpenSky\Bundle\LdapBundle\Tests\Security\User;
 
 use OpenSky\Bundle\LdapBundle\Security\User\LdapUser;
+use PHPUnit\Framework\TestCase;
 
-class LdapUserTest extends \PHPUnit_Framework_TestCase
+class LdapUserTest extends TestCase
 {
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testConstructorException()
     {
@@ -23,10 +24,10 @@ class LdapUserTest extends \PHPUnit_Framework_TestCase
     public function testGetRoles()
     {
         $user = new LdapUser('jmikola');
-        $this->assertEquals(array(), $user->getRoles());
+        $this->assertEquals([], $user->getRoles());
 
-        $user = new LdapUser('jmikola', array('ROLE_ADMIN'));
-        $this->assertEquals(array('ROLE_ADMIN'), $user->getRoles());
+        $user = new LdapUser('jmikola', ['ROLE_ADMIN']);
+        $this->assertEquals(['ROLE_ADMIN'], $user->getRoles());
     }
 
     public function testGetPassword()
@@ -53,6 +54,6 @@ class LdapUserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($user->equals(new LdapUser('jmikola')));
         $this->assertFalse($user->equals(new LdapUser('foobar')));
-        $this->assertFalse($user->equals($this->getMock('Symfony\Component\Security\Core\User\UserInterface')));
+        $this->assertFalse($user->equals($this->createMock('Symfony\Component\Security\Core\User\UserInterface')));
     }
 }

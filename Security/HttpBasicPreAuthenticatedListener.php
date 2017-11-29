@@ -20,6 +20,6 @@ class HttpBasicPreAuthenticatedListener extends AbstractPreAuthenticatedListener
             throw new BadCredentialsException('HTTP-authenticated user was not found');
         }
 
-        return array($request->server->get('PHP_AUTH_USER'), $request->server->get('PHP_AUTH_PW', ''));
+        return [$request->server->get('PHP_AUTH_USER'), $request->server->get('PHP_AUTH_PW', '')];
     }
 }

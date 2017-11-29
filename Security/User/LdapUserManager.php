@@ -23,38 +23,39 @@ class LdapUserManager implements LdapUserManagerInterface
     /**
      * Constructor.
      *
-     * @param Ldap   $ldap               LDAP client instance
-     * @param string $userBaseDn         Base DN for user records
-     * @param string $userFilter         Filter for user queries
-     * @param string $usernameAttribute  User entry attribute from which to derive username
-     * @param string $roleBaseDn         Base DN for role records
-     * @param string $roleFilter         Filter for role queries
-     * @param string $roleNameAttribute  Role entry attribute from which to derive name
-     * @param string $roleUserAttribute  Role entry attribute from which to derive user memberships
+     * @param Ldap   $ldap              LDAP client instance
+     * @param string $userBaseDn        Base DN for user records
+     * @param string $userFilter        Filter for user queries
+     * @param string $usernameAttribute User entry attribute from which to derive username
+     * @param string $roleBaseDn        Base DN for role records
+     * @param string $roleFilter        Filter for role queries
+     * @param string $roleNameAttribute Role entry attribute from which to derive name
+     * @param string $roleUserAttribute Role entry attribute from which to derive user memberships
      */
     public function __construct(Ldap $ldap, $userBaseDn, $userFilter, $usernameAttribute, $roleBaseDn, $roleFilter, $roleNameAttribute, $roleUserAttribute)
     {
-        $this->ldap               = $ldap;
-        $this->userBaseDn         = $userBaseDn;
-        $this->userFilter         = $userFilter;
-        $this->usernameAttribute  = $usernameAttribute;
-        $this->roleBaseDn         = $roleBaseDn;
-        $this->roleFilter         = $roleFilter;
-        $this->roleNameAttribute  = $roleNameAttribute;
-        $this->roleUserAttribute  = $roleUserAttribute;
+        $this->ldap = $ldap;
+        $this->userBaseDn = $userBaseDn;
+        $this->userFilter = $userFilter;
+        $this->usernameAttribute = $usernameAttribute;
+        $this->roleBaseDn = $roleBaseDn;
+        $this->roleFilter = $roleFilter;
+        $this->roleNameAttribute = $roleNameAttribute;
+        $this->roleUserAttribute = $roleUserAttribute;
     }
 
     /**
      * Check if the username exists.
      *
      * @param string $username
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasUsername($username)
     {
         $dn = sprintf('%s=%s,%s', $this->usernameAttribute, $username, $this->userBaseDn);
 
-        return (boolean) $this->ldap->count($this->userFilter, $dn, Ldap::SEARCH_SCOPE_BASE);
+        return (bool) $this->ldap->count($this->userFilter, $dn, Ldap::SEARCH_SCOPE_BASE);
     }
 
     /**
@@ -68,7 +69,7 @@ class LdapUserManager implements LdapUserManagerInterface
             $this->userFilter,
             $this->userBaseDn,
             Ldap::SEARCH_SCOPE_SUB,
-            array($this->usernameAttribute)
+            [$this->usernameAttribute]
         ), $this->usernameAttribute);
     }
 
@@ -83,7 +84,7 @@ class LdapUserManager implements LdapUserManagerInterface
             $this->roleFilter,
             $this->roleBaseDn,
             Ldap::SEARCH_SCOPE_SUB,
-            array($this->roleNameAttribute)
+            [$this->roleNameAttribute]
         ), $this->roleNameAttribute);
     }
 
@@ -91,6 +92,7 @@ class LdapUserManager implements LdapUserManagerInterface
      * Get a list of roles for the username.
      *
      * @param string $username
+     *
      * @return array
      */
     public function getRolesForUsername($username)
@@ -99,7 +101,7 @@ class LdapUserManager implements LdapUserManagerInterface
             sprintf('(&%s(%s=%s))', $this->roleFilter, $this->roleUserAttribute, $username),
             $this->roleBaseDn,
             Ldap::SEARCH_SCOPE_SUB,
-            array($this->roleNameAttribute)
+            [$this->roleNameAttribute]
         ), $this->roleNameAttribute);
     }
 
@@ -107,7 +109,7 @@ class LdapUserManager implements LdapUserManagerInterface
      * Set roles for a username.
      *
      * @param string $username
-     * @param array $roles
+     * @param array  $roles
      */
     public function setRolesForUsername($username, array $roles)
     {
@@ -116,7 +118,7 @@ class LdapUserManager implements LdapUserManagerInterface
         $addRoles = array_diff($roles, $existingRoles);
         $removeRoles = array_diff($existingRoles, $roles);
 
-        $updateEntriesByDn = array();
+        $updateEntriesByDn = [];
 
         foreach ($addRoles as $name) {
             $dn = sprintf('%s=%s,%s', $this->roleNameAttribute, $name, $this->roleBaseDn);
@@ -151,11 +153,12 @@ class LdapUserManager implements LdapUserManagerInterface
      *
      * @param array  $entries
      * @param string $attributeName
+     *
      * @return array
      */
     private function resolveEntriesToAttributes(array $entries, $attributeName)
     {
-        $attributes = array();
+        $attributes = [];
 
         foreach ($entries as $entry) {
             if (isset($entry[$attributeName][0])) {

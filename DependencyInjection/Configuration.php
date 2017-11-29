@@ -2,9 +2,9 @@
 
 namespace OpenSky\Bundle\LdapBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
@@ -40,9 +40,9 @@ class Configuration implements ConfigurationInterface
             ->children()
                 // TODO: Add Zend\Ldap configuration structure
                 ->variableNode('client')
-                    ->defaultValue(array())
+                    ->defaultValue([])
                     ->beforeNormalization()
-                        ->ifTrue(function($v){ return !is_array($v); })
+                        ->ifTrue(function ($v) { return !is_array($v); })
                         ->thenEmptyArray()
                     ->end()
                 ->end()
@@ -60,10 +60,10 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('role_prefix')->defaultValue('ROLE_LDAP_')->end()
                         ->arrayNode('default_roles')
                             ->performNoDeepMerging()
-                            ->beforeNormalization()->ifString()->then(function($v) { return array('value' => $v); })->end()
+                            ->beforeNormalization()->ifString()->then(function ($v) { return ['value' => $v]; })->end()
                             ->beforeNormalization()
-                                ->ifTrue(function($v) { return is_array($v) && isset($v['value']); })
-                                ->then(function($v) { return preg_split('/\s*,\s*/', $v['value']); })
+                                ->ifTrue(function ($v) { return is_array($v) && isset($v['value']); })
+                                ->then(function ($v) { return preg_split('/\s*,\s*/', $v['value']); })
                             ->end()
                             ->prototype('scalar')->end()
                         ->end()

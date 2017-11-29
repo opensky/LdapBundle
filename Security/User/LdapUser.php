@@ -20,7 +20,7 @@ class LdapUser implements UserInterface
      * @param string $username
      * @param array  $roles
      */
-    public function __construct($username, array $roles = array())
+    public function __construct($username, array $roles = [])
     {
         if (empty($username)) {
             throw new \InvalidArgumentException('The username cannot be empty.');
@@ -83,7 +83,7 @@ class LdapUser implements UserInterface
      */
     public function equals(UserInterface $account)
     {
-        if (!$account instanceof LdapUser) {
+        if (!$account instanceof self) {
             return false;
         }
 
