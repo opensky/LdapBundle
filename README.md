@@ -103,7 +103,7 @@ configured as follows:
 
     # app/config/security.yml
 
-    security.config:
+    security:
         providers:
             ldap:
                 id: opensky_ldap.user_provider
